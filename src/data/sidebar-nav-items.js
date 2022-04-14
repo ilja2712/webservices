@@ -1,6 +1,12 @@
 export default function() {
   return [
     {
+      title: "Задачи",
+      to: "/tasks",
+      htmlBefore: '<i class="material-icons">view_module</i>',
+      htmlAfter: ""
+    },
+    {
       title: "Blog Dashboard",
       to: "/blog-overview",
       htmlBefore: '<i class="material-icons">edit</i>',

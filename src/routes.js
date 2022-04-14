@@ -13,17 +13,25 @@ import ComponentsOverview from "./views/ComponentsOverview";
 import Tables from "./views/Tables";
 import BlogPosts from "./views/BlogPosts";
 
+// Действующие страницы
+import Tasks from "./views/Tasks";
+
 export default [
   {
     path: "/",
     exact: true,
     layout: DefaultLayout,
-    component: () => <Redirect to="/blog-overview" />
+    component: () => <Redirect to="/tasks" />
   },
   {
     path: "/blog-overview",
     layout: DefaultLayout,
     component: BlogOverview
+  },
+  {
+    path: "/tasks",
+    layout: DefaultLayout,
+    component: Tasks
   },
   {
     path: "/user-profile-lite",
