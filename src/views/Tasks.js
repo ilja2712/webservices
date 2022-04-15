@@ -1,9 +1,8 @@
 import React from "react";
-import { Container, Row, Col } from "shards-react";
+import { Container, Row } from "shards-react";
 import TaskTable from "../components/tasks/TaskTable";
 import PageTitle from "../components/common/PageTitle";
 
-console.log(TaskTable);
 const Tasks = () => (
   <Container fluid className="main-content-container px-4">
     {/* Заглавие страницы */}

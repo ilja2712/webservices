@@ -1,0 +1,101 @@
+/* Минимальная высота */
+.mnh100 {
+    min-height: 100px;
+}
+
+.mnh150 {
+    min-height: 150px;
+}
+
+.mnh200 {
+    min-height: 200px;
+}
+
+.mnh250 {
+    min-height: 250px;
+}
+
+.mnh300 {
+    min-height: 300px;
+}
+
+.mnh350 {
+    min-height: 350px;
+}
+
+.mnh400 {
+    min-height: 400px;
+}
+
+.mnh450 {
+    min-height: 450px;
+}
+
+.mnh500 {
+    min-height: 500px;
+}
+
+.mnh600 {
+    min-height: 600px;
+}
+
+.mnh700 {
+    min-height: 700px;
+}
+
+.mnh800 {
+    min-height: 800px;
+}
+
+
+
+/* 
+**** Максимальная высота ****
+*/
+.mxh100 {
+    max-height: 100px;
+}
+
+.mxh150 {
+    max-height: 150px;
+}
+
+.mxh200 {
+    max-height: 200px;
+}
+
+.mxh250 {
+    max-height: 250px;
+}
+
+.mxh300 {
+    max-height: 300px;
+}
+
+.mxh350 {
+    max-height: 350px;
+}
+
+.mxh400 {
+    max-height: 400px;
+}
+
+.mxh450 {
+    max-height: 450px;
+}
+
+.mxh500 {
+    max-height: 500px;
+}
+
+.mnh600 {
+    max-height: 600px;
+}
+
+.mnh700 {
+    max-height: 700px;
+}
+
+.mnh800 {
+    max-height: 800px;
+}
