@@ -1,66 +1,93 @@
-import React from "react";
-import Task from "./Task"
-import { Card, CardHeader, CardBody } from "shards-react";
-import { Component } from "react/cjs/react.production.min";
-import Column from "./Column";
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import { DragDropContext } from "react-beautiful-dnd";
+import ColumnElement from "./ColumnElement";
 
-/* Создание доски задач */
-class TaskTable extends Component {
+const DragDropContextContainer = styled.div`
+  padding: 20px;
+  border: 4px solid indianred;
+  border-radius: 6px;
+`;
 
-    constructor(props) {
-        super(props); 
-        this.state = {
-            columns: []
-        };
+const ListGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 8px;
+`;
 
-        // Добавление колонки
-        this.handleClickAddColumn = () => {
-            const columnName = document.getElementById("nameAddColumn");
-            this.state.columns.push(new Column(columnName.value));
-            this.setState({columns: this.state.columns});
+// fake data generator
+const getItems = (count, prefix) =>
+  Array.from({ length: count }, (v, k) => k).map((k) => {
+    const randomId = Math.floor(Math.random() * 1000);
+    return {
+      id: `item-${randomId}`,
+      prefix,
+      content: `item ${randomId}`
+    };
+  });
 
-            columnName.value = "";
-            return;
-        }
+const removeFromList = (list, index) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(index, 1);
+  return [removed, result];
+};
 
+const addToList = (list, index, element) => {
+  const result = Array.from(list);
+  result.splice(index, 0, element);
+  return result;
+};
+
+const lists = ["todo", "inProgress", "done"];
+
+const generateLists = () =>
+  lists.reduce(
+    (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey) }),
+    {}
+  );
+
+function TaskTable() {
+  const [elements, setElements] = React.useState(generateLists());
+
+  useEffect(() => {
+    setElements(generateLists());
+  }, []);
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
     }
+    const listCopy = { ...elements };
 
+    const sourceList = listCopy[result.source.droppableId];
+    const [removedElement, newSourceList] = removeFromList(
+      sourceList,
+      result.source.index
+    );
+    listCopy[result.source.droppableId] = newSourceList;
+    const destinationList = listCopy[result.destination.droppableId];
+    listCopy[result.destination.droppableId] = addToList(
+      destinationList,
+      result.destination.index,
+      removedElement
+    );
 
-    render() {
-        const { columns } = this.state;
+    setElements(listCopy);
+  };
 
-        return (
-            <><DragDropContext>
-                <Droppable droppableId="characters">
-                    {columns.map((col, idx) => (
-                        (provided) => (
-                        <Card small className="mb-1 mr-2 mnh700" key={idx} {...provided.droppableProps} ref={provided.innerRef} >
-                            <CardHeader className="border-bottom">
-                                <div className="mb-1 input-group input-group-seamless">
-                                    <input id="nameColumn" className="form-control border-0" disabled="true" value={col.columnName}></input>
-                                    <div className="input-group-append">
-                                        <button className="btn btn-outline-primary btn-sm">Добавить</button>
-                                    </div>
-                                </div>
-                            </CardHeader>
-                            <CardBody className="p-2 pb-2 mnw250">
-                                <Task stateTask={col.columnName}/>
-                            </CardBody>
-                        </Card>)
-                        ))}
-                    </Droppable>
-              </DragDropContext>
-                    <CardHeader className="border-bottom mb-1 mr-1 mnw300">
-                        <div className="mb-1 input-group input-group-seamless">
-                            <input id="nameAddColumn" placeholder="Добавить колонку" className="form-control"></input>
-                            <div className="input-group-append">
-                                <button id="addColumn" className="btn btn-outline-primary btn-sm" onClick={this.handleClickAddColumn}>Добавить</button>
-                            </div>
-                        </div>
-                    </CardHeader></>
-        )
-    }
+  return (
+      <DragDropContext onDragEnd={onDragEnd}>
+        <ListGrid>
+          {lists.map((listKey) => (
+            <ColumnElement
+              elements={elements[listKey]}
+              key={listKey}
+              prefix={listKey}
+            />
+          ))}
+        </ListGrid>
+      </DragDropContext>
+  );
 }
 
 export default TaskTable;
