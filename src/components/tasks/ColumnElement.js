@@ -2,6 +2,8 @@ import { Droppable } from "react-beautiful-dnd";
 import Task from "./Task";
 import React from "react";
 import styled from "styled-components";
+import DeleteIcon from '@mui/icons-material/Delete';
+import IconButton from '@mui/material/IconButton';
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -15,8 +17,14 @@ const DroppableStyles = styled.div`
 `;
 
 const ColumnElement = ({ prefix, elements }) => (
+  
   <DroppableStyles>
-    <ColumnHeader>{prefix}</ColumnHeader>
+    <ColumnHeader className="mnw250">
+    <input className="form-control mxw150" value={prefix}></input>
+    <IconButton aria-label="delete" size="small" color="error">
+        <DeleteIcon fontSize="inherit" />
+      </IconButton>
+      </ColumnHeader>
     <Droppable droppableId={`${prefix}`}>
       {(provided) => (
         <div {...provided.droppableProps} ref={provided.innerRef}>

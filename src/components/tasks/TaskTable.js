@@ -2,6 +2,14 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  ListGroup,
+  ListGroupItem,
+  Button
+} from "shards-react";
 
 const DragDropContextContainer = styled.div`
   padding: 20px;
@@ -38,7 +46,7 @@ const addToList = (list, index, element) => {
   return result;
 };
 
-const lists = ["todo", "inProgress", "done"];
+const lists = ["Открыта", "В работе", "Завершена"];
 
 const generateLists = () =>
   lists.reduce(
