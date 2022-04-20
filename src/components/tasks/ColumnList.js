@@ -1,8 +1,9 @@
 
-const ColumnList = (columnName) => {
-    return {
-        columnName
-    };
+const ColumnList = () => {
+    
+    const lists = ["Открыта", "В работе", "Закрыта"];
+
+    return lists;
 }
 
 export default ColumnList;

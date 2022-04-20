@@ -1,5 +1,6 @@
 import "./style/styleWidth.css";
 import "./style/styleHeight.css";
+import "./style/style.css";
 
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";

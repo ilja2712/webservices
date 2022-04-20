@@ -2,8 +2,8 @@ import { Droppable } from "react-beautiful-dnd";
 import Task from "./Task";
 import React from "react";
 import styled from "styled-components";
-import DeleteIcon from '@mui/icons-material/Delete';
-import IconButton from '@mui/material/IconButton';
+import { BiTrash } from "react-icons/bi";
+import { IoAddCircleOutline } from "react-icons/io5";
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -16,14 +16,21 @@ const DroppableStyles = styled.div`
   background: #d4d4d4;
 `;
 
+const handleAddColumn = () => {
+  
+};
+
 const ColumnElement = ({ prefix, elements }) => (
   
   <DroppableStyles>
     <ColumnHeader className="mnw250">
-    <input className="form-control mxw150" value={prefix}></input>
-    <IconButton aria-label="delete" size="small" color="error">
-        <DeleteIcon fontSize="inherit" />
-      </IconButton>
+        <div className="columnButton1">
+            <div className="columnButton"><input className="form-control mxw150" value={prefix}></input></div>
+            <div className="columnButton right-align">
+              <BiTrash size={30} color="red"/>
+              <IoAddCircleOutline size={30} color="green" onClick={handleAddColumn}/>
+              </div>
+        </div>
       </ColumnHeader>
     <Droppable droppableId={`${prefix}`}>
       {(provided) => (

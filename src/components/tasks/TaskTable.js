@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
+import ColumnList from "./ColumnList";
 import {
   Card,
   CardHeader,
@@ -11,12 +12,6 @@ import {
   Button
 } from "shards-react";
 
-const DragDropContextContainer = styled.div`
-  padding: 20px;
-  border: 4px solid indianred;
-  border-radius: 6px;
-`;
-
 const ListGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -25,6 +20,7 @@ const ListGrid = styled.div`
 
 // fake data generator
 const getItems = (count, prefix) =>
+// создание массива
   Array.from({ length: count }, (v, k) => k).map((k) => {
     const randomId = Math.floor(Math.random() * 1000);
     return {
@@ -46,8 +42,9 @@ const addToList = (list, index, element) => {
   return result;
 };
 
-const lists = ["Открыта", "В работе", "Завершена"];
+const lists = ColumnList();
 
+// генерирует 
 const generateLists = () =>
   lists.reduce(
     (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey) }),
@@ -68,6 +65,7 @@ function TaskTable() {
     const listCopy = { ...elements };
 
     const sourceList = listCopy[result.source.droppableId];
+
     const [removedElement, newSourceList] = removeFromList(
       sourceList,
       result.source.index
