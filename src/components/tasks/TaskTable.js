@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import db from '../../data/firebase.config';
+import React, { useEffect } from 'react';
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
-import ColumnList from "./ColumnList";
 import {
   Card,
   CardHeader,
@@ -42,16 +42,33 @@ const addToList = (list, index, element) => {
   return result;
 };
 
-const lists = ColumnList();
 
-// генерирует 
-const generateLists = () =>
-  lists.reduce(
-    (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey) }),
-    {}
-  );
 
 function TaskTable() {
+    // генерирует 
+    const generateLists = () =>
+        lists.reduce(
+            (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey) }),
+        {}
+    );
+
+    const [lists, setLists] = React.useState([]);
+
+    const fetchBlogs = async() => {
+        console.log(db.collection('column/1'));
+            const response = db.collection('column');
+            const data = await response.get();
+            data.docs.forEach(item => {
+                setLists([...lists, item.data()])
+                })
+        }
+
+    useEffect(() => {
+            fetchBlogs();
+    }, [])
+
+    console.log(lists);
+
   const [elements, setElements] = React.useState(generateLists());
 
   useEffect(() => {

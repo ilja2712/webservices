@@ -17,7 +17,7 @@ const DroppableStyles = styled.div`
 `;
 
 const handleAddColumn = () => {
-  
+    
 };
 
 const ColumnElement = ({ prefix, elements }) => (
