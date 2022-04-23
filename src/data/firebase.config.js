@@ -1,6 +1,7 @@
 import firebase from 'firebase/compat/app';
 import { initializeApp } from "firebase/app";
-import { getFirestore } from 'firebase/firestore';
+import { collection, getDocs, getFirestore } from 'firebase/firestore';
+import { getAnalytics } from 'firebase/analytics';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDfwY7iVwQJyZOE0_sGia4Hf4z0PjOU6_E",
@@ -13,6 +14,19 @@ const firebaseConfig = {
   };
   
 const firebaseApp = initializeApp(firebaseConfig);
-const db = getFirestore();
+const db = getFirestore(firebaseApp);
+const analytics = getAnalytics(firebaseApp);
 
-export default db;
+const lists = [];
+
+const dataSource = async() => {
+    const data = await getDocs(collection(db, "column"));
+    for(const doc of data.docs){
+      console.log(doc.id, '=>', doc.data());
+      lists.push(doc.data());
+    }
+}
+
+dataSource();
+
+export default lists;

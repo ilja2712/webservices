@@ -52,24 +52,12 @@ function TaskTable() {
         {}
     );
 
-    const [lists, setLists] = React.useState([]);
-
-    const fetchBlogs = async() => {
-        console.log(db.collection('column/1'));
-            const response = db.collection('column');
-            const data = await response.get();
-            data.docs.forEach(item => {
-                setLists([...lists, item.data()])
-                })
-        }
-
-    useEffect(() => {
-            fetchBlogs();
-    }, [])
+    const [lists, setLists] = React.useState(db.filter(([key, col]) =>  col[key] == 'columnName'));
 
     console.log(lists);
 
   const [elements, setElements] = React.useState(generateLists());
+
 
   useEffect(() => {
     setElements(generateLists());
