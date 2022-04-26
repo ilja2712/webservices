@@ -42,22 +42,19 @@ const addToList = (list, index, element) => {
   return result;
 };
 
-
-
 function TaskTable() {
-    // генерирует 
+
+    // генерирует задачи в колонках
     const generateLists = () =>
         lists.reduce(
-            (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey) }),
+            (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey)}),
         {}
     );
 
-    const [lists, setLists] = React.useState(db.filter(([key, col]) =>  col[key] == 'columnName'));
+    const [lists, setLists] = React.useState(db);
+    const [elements, setElements] = React.useState(generateLists);
 
-    console.log(lists);
-
-  const [elements, setElements] = React.useState(generateLists());
-
+  console.log(elements);
 
   useEffect(() => {
     setElements(generateLists());
