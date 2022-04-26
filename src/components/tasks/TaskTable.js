@@ -1,5 +1,5 @@
-import db from '../../data/firebase.config';
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
+import getLists from "../../data/getData";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
@@ -44,19 +44,34 @@ const addToList = (list, index, element) => {
 
 function TaskTable() {
 
-    // генерирует задачи в колонках
-    const generateLists = () =>
-        lists.reduce(
-            (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey)}),
-        {}
-    );
+  const arr = [];
+  const [lists, setLists] = React.useState();
 
-    const [lists, setLists] = React.useState(db);
-    const [elements, setElements] = React.useState(generateLists);
+  // генерирует задачи в колонках
+  const generateLists = () =>
+      lists.reduce(
+          (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey)}),
+      {}
+  );
+
+  getLists().then(data =>{
+    for (const doc of data.docs) {
+        console.log(doc.id, '=>', doc.data());
+        arr.push(doc.data());
+      }
+      arr.map(list => {
+          setLists(lists.push(list["columnName"]));
+      })
+  }).catch(error => {
+    console.error(error);
+  });
+
+  const [elements, setElements] = React.useState(generateLists);
 
   console.log(elements);
 
   useEffect(() => {
+    // перегенирируем колонки тасков
     setElements(generateLists());
   }, []);
 
@@ -84,6 +99,7 @@ function TaskTable() {
   };
 
   return (
+    <Suspense fallback={<h1>Loading tasks...</h1>}>
       <DragDropContext onDragEnd={onDragEnd}>
         <ListGrid>
           {lists.map((listKey) => (
@@ -95,6 +111,7 @@ function TaskTable() {
           ))}
         </ListGrid>
       </DragDropContext>
+      </Suspense>
   );
 }
 

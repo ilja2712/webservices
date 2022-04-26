@@ -17,23 +17,4 @@ const firebaseApp = initializeApp(firebaseConfig);
 const db = getFirestore(firebaseApp);
 const analytics = getAnalytics(firebaseApp);
 
-
-const arr = [];
-const lists = [];
-
-
-const getLists = async() => {
-    const data = await getDocs(collection(db, "column"));
-    for(const doc of data.docs){
-      console.log(doc.id, '=>', doc.data());
-      arr.push(doc.data());
-    }
-    
-    arr.map(list => {
-        lists.push(list["columnName"]);
-    })
-}
-
-getLists();
-
-export default lists;
+export default db;
