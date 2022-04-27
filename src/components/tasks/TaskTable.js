@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import getLists from "../../data/getData";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -42,76 +42,73 @@ const addToList = (list, index, element) => {
   return result;
 };
 
+  const arr = [];
+  const lists = [];
+
+ /** Генерация новых задач */
+ const generateLists = () => 
+ lists.reduce(
+     (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey)}),
+ {});
+
 function TaskTable() {
 
-  const arr = [];
-  const [lists, setLists] = React.useState();
+  const [elements, setElements] = React.useState();
 
-  // генерирует задачи в колонках
-  const generateLists = () =>
-      lists.reduce(
-          (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey)}),
-      {}
-  );
-
-  getLists().then(data =>{
-    for (const doc of data.docs) {
-        console.log(doc.id, '=>', doc.data());
+  /** Получение списка колонок задач */
+  getLists().then(data => {
+    if (lists.length == 0) {
+      for (const doc of data.docs) {
         arr.push(doc.data());
       }
-      arr.map(list => {
-          setLists(lists.push(list["columnName"]));
-      })
+      arr.map(list => {lists.push(list['columnName'])});
+      setElements(generateLists());
+    }
   }).catch(error => {
     console.error(error);
   });
 
-  const [elements, setElements] = React.useState(generateLists);
-
-  console.log(elements);
-
   useEffect(() => {
-    // перегенирируем колонки тасков
     setElements(generateLists());
   }, []);
 
+  /** Отрисовка конечного положения задач в столбцах */
   const onDragEnd = (result) => {
-    if (!result.destination) {
-      return;
-    }
-    const listCopy = { ...elements };
+  if (!result.destination) {
+    return;
+  }
 
-    const sourceList = listCopy[result.source.droppableId];
+  const listCopy = { ...elements };
 
-    const [removedElement, newSourceList] = removeFromList(
-      sourceList,
-      result.source.index
-    );
-    listCopy[result.source.droppableId] = newSourceList;
-    const destinationList = listCopy[result.destination.droppableId];
-    listCopy[result.destination.droppableId] = addToList(
-      destinationList,
-      result.destination.index,
-      removedElement
-    );
+  const sourceList = listCopy[result.source.droppableId];
 
-    setElements(listCopy);
+  const [removedElement, newSourceList] = removeFromList(
+    sourceList,
+    result.source.index
+  );
+  listCopy[result.source.droppableId] = newSourceList;
+  const destinationList = listCopy[result.destination.droppableId];
+  listCopy[result.destination.droppableId] = addToList(
+    destinationList,
+    result.destination.index,
+    removedElement
+  );
+
+  setElements(listCopy);
   };
 
   return (
-    <Suspense fallback={<h1>Loading tasks...</h1>}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <ListGrid>
-          {lists.map((listKey) => (
-            <ColumnElement
-              elements={elements[listKey]}
-              key={listKey}
-              prefix={listKey}
-            />
-          ))}
-        </ListGrid>
-      </DragDropContext>
-      </Suspense>
+  <DragDropContext onDragEnd={onDragEnd}>
+    <ListGrid>
+      {lists.map((listKey) => (
+        <ColumnElement
+          elements={elements[listKey]}
+          key={listKey}
+          prefix={listKey}
+        />
+      ))}
+    </ListGrid>
+  </DragDropContext>
   );
 }
 

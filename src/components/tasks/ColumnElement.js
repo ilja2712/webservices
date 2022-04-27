@@ -20,12 +20,17 @@ const handleAddColumn = () => {
     
 };
 
+const handleClick = () => {
+    const inputField = document.getElementById("columnNameField");
+    inputField.contentEditable = true;
+};
+
 const ColumnElement = ({ prefix, elements }) => (
   
   <DroppableStyles>
     <ColumnHeader className="mnw250">
         <div className="columnButton1">
-            <div className="columnButton"><input className="form-control mxw150" value={prefix}></input></div>
+            <div className="columnButton"><input id="columnNameField" className="mxw150 fieldColumnName form-control-plaintext " contentEditable="false" defaultValue={prefix} onClick={handleClick}></input></div>
             <div className="columnButton right-align">
               <BiTrash size={30} color="red"/>
               <IoAddCircleOutline size={30} color="green" onClick={handleAddColumn}/>
