@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import {
   Dropdown,
@@ -9,36 +9,29 @@ import {
   NavItem,
   NavLink
 } from "shards-react";
+import { useUserContext } from "../../../../context/userContext";
 
-export default class UserActions extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      visible: false
-    };
-
-    this.toggleUserActions = this.toggleUserActions.bind(this);
+const UserActions = () => {
+  
+  const [visible, setVisible] = useState(false);
+ 
+  const toggleUserActions = () => {
+    setVisible(!visible);
   }
 
-  toggleUserActions() {
-    this.setState({
-      visible: !this.state.visible
-    });
-  }
+  const { user, logoutUser } = useUserContext();
 
-  render() {
     return (
-      <NavItem tag={Dropdown} caret toggle={this.toggleUserActions}>
+      <NavItem tag={Dropdown} caret toggle={toggleUserActions}>
         <DropdownToggle caret tag={NavLink} className="text-nowrap px-3">
           <img
             className="user-avatar rounded-circle mr-2"
-            src={require("./../../../../images/avatars/0.jpg")}
+            src={require("./../../../../images/avatars/avatar.jpg")}
             alt="User Avatar"
           />{" "}
-          <span className="d-none d-md-inline-block">Sierra Brooks</span>
+          <span className="d-none d-md-inline-block">{user.displayName}</span>
         </DropdownToggle>
-        <Collapse tag={DropdownMenu} right small open={this.state.visible}>
+        <Collapse tag={DropdownMenu} right small open={visible}>
           <DropdownItem tag={Link} to="user-profile">
             <i className="material-icons">&#xE7FD;</i> Profile
           </DropdownItem>
@@ -52,11 +45,12 @@ export default class UserActions extends React.Component {
             <i className="material-icons">&#xE896;</i> Transactions
           </DropdownItem>
           <DropdownItem divider />
-          <DropdownItem tag={Link} to="/" className="text-danger">
+          <DropdownItem onClick={logoutUser} className="text-danger">
             <i className="material-icons text-danger">&#xE879;</i> Logout
           </DropdownItem>
         </Collapse>
       </NavItem>
     );
-  }
 }
+
+export default UserActions;

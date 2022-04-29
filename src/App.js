@@ -18,7 +18,7 @@ export default () => {
 
   return ( 
     <>{ error && <p className="error"></p>}
-      {loading ? <h2>Loading...</h2> : <>
+      {loading ? <h2>Loading...</h2> : <> {user ?
       <Router basename={process.env.REACT_APP_BASENAME || ""}>
         <div>
           {routes.map((route, index) => {
@@ -40,7 +40,7 @@ export default () => {
         </div>
       </Router>
       :
-      <Auth /> </>}
+      <Auth />} </>}
     </>
   )
 };
