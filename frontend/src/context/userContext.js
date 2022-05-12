@@ -18,6 +18,7 @@ export const UserContextProvider = ({children}) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState();
     const [error, setError] = useState("");
+    const [uid, setUid] = useState();
 
     useEffect(() => {
         setLoading(true);
@@ -25,6 +26,7 @@ export const UserContextProvider = ({children}) => {
             res ? setUser(res) : setUser(null);
             setError("");
             setLoading(false);
+            setUid(res.uid);
         });
         return unsubscribe;
     }, [])
@@ -46,6 +48,7 @@ export const UserContextProvider = ({children}) => {
     const signInUser = (email, password) => {
         ///
         setLoading(true);
+        console.log(auth.currentUser);
         signInWithEmailAndPassword(auth, email, password)
             .then(res => console.log(res))
             .catch((err) => console.log(err.message))
@@ -64,6 +67,7 @@ export const UserContextProvider = ({children}) => {
 
     const contextValue = {
         user,
+        uid,
         loading,
         error,
         registerUser,

@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { BiTrash } from "react-icons/bi";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { setDataName } from "../../data/setData";
+import { useUserContext } from "../../context/userContext";
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -27,14 +28,15 @@ const handleClick = () => {
 
 
 
-const ColumnElement = ({ prefix, elements }) => {
+const ColumnElement = ({ prefix, elements, id }) => {
 
   const [columnName, setName] = useState(prefix);
+  const { uid } = useUserContext();
 
   const setColumnName = (e) => {
     console.log(e.target.value);
     setName(e.target.value);
-    setDataName(e.target.value);
+    setDataName(e.target.value, uid, id);
   };
 
   return ( <DroppableStyles>

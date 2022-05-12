@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import getLists from "../../data/getData";
 import styled from "styled-components";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
 import {
   Card,
@@ -61,7 +61,7 @@ function TaskTable() {
       for (const doc of data.docs) {
         arr.push(doc.data());
       }
-      arr.map(list => {lists.push(list['columnName'])});
+      arr.map(list => {list["columns"].forEach(col => {lists.push(col)})});
       setElements(generateLists());
     }
   }).catch(error => {
@@ -100,11 +100,12 @@ function TaskTable() {
   return (
   <DragDropContext onDragEnd={onDragEnd}>
     <ListGrid>
-      {lists.map((listKey) => (
+      {lists.map((listKey, idx) => (
         <ColumnElement
           elements={elements[listKey]}
           key={listKey}
           prefix={listKey}
+          id={idx}
         />
       ))}
     </ListGrid>
