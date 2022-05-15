@@ -1,4 +1,4 @@
-const express = require("express");
+    const express = require("express");
     const bodyParser = require("body-parser");
     
     const app = express();
@@ -14,6 +14,8 @@ const express = require("express");
       res.json({ message: "Это стартовая страница нашего приложения" });
     });
     
+    require("../backend/routes/deals.routes.js")(app);
+
     // установить порт, и слушать запросы
     app.listen(3001, () => {
       console.log("Сервер запущен на 3001 порту");
