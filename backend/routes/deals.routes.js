@@ -4,7 +4,7 @@ module.exports = app => {
        const deals = require("../controllers/deal.controller.js");
      
        // Создание нового дела по методу post
-       app.post("/deals", deals.create);
+       //app.post("/deals", deals.create);
      
        // Получение всех дел сразу
        app.get("/deals", deals.findAll);

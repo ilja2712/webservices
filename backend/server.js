@@ -17,6 +17,6 @@
     require("../backend/routes/deals.routes.js")(app);
 
     // установить порт, и слушать запросы
-    app.listen(3001, () => {
+    app.listen(3003, () => {
       console.log("Сервер запущен на 3001 порту");
     });

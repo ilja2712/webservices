@@ -1,3 +1,5 @@
+const sql = require("./db.js");
+
 // конструктор нашего дела
 const Deal = function(deal) {
     this.text = deal.text;

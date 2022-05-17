@@ -10,9 +10,12 @@ const mysql = require("mysql");
   });
   
   // открываем наше соединение с базой данных
-  connection.connect(err => {
-    if (err) throw error;
-    console.log("успешно соединено с базой данных");
+  connection.connect(function(err) {
+    if (err) {
+      console.log("[mysql error]", err);
+      return;
+    }
+    console.log("[Successfully!] " + connection.threadId);
   });
 
   module.exports = connection;

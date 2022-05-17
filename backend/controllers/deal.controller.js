@@ -31,16 +31,16 @@ exports.create = (req, res) => {
 
 // Получение всех пользователей из базы данных
 exports.findAll = (req, res) => {
+
     Deal.getAll((err, data) => {
-        if (err)
+        if (err) {
           res.status(500).send({
             message:
               err.message || "Что-то случилось во время получения всех пользователей"
           });
-        else 
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
-        // я оставлю заголовки, получаемые с сервера, в таком виде, но конечно в реальном продакшене лучше переписать под конкретный origin
-        res.send(data);
-      });
-    };
+        }
+        else {
+          res.send(data);
+        }
+    });
+};
