@@ -1,11 +1,11 @@
 const sql = require("./db.js");
 
 // конструктор нашего дела
-const Deal = function(deal) {
+const Users = function(users) {
     this.text = deal.text;
   };
   //у нашей модели будут функции, с помощью которых можно осуществлять все операции CRUD, которые были озвучены в начале статьи:
-  Deal.create = (newDeal, result) => {
+  Users.create = (newDeal, result) => {
     sql.query("INSERT INTO USERS SET ?", newDeal, (err, res) => {
       //операция вставки из SQL
       if (err) {
@@ -14,13 +14,13 @@ const Deal = function(deal) {
         //немного бедная обработка ошибок, но на первое время хватит
         return;
       }
-  
+
       console.log("Дело сделано", { id: res.insertId, ...newDeal });
       result(null, { id: res.insertId, ...newDeal });
     });
   };
 
-  Deal.findById = (dealId, result) => {
+  Users.findById = (dealId, result) => {
     sql.query(`SELECT * FROM USERS WHERE id = ${dealId}`, (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -39,7 +39,8 @@ const Deal = function(deal) {
         });
     };
     
-    Deal.getAll = result => {
+    Users.getAll = result => {
+        console.log(result);
     sql.query("SELECT * FROM USERS", (err, res) => {
         if (err) {
             console.log("error: ", err);
@@ -52,7 +53,7 @@ const Deal = function(deal) {
         });
     };
     
-    Deal.updateById = (id, deal, result) => {
+    Users.updateById = (id, deal, result) => {
         sql.query("UPDATE USERS SET text =? WHERE id = ?",
             [deal.text, id],
             (err, res) => {
@@ -73,7 +74,7 @@ const Deal = function(deal) {
         );
     };
     
-    Deal.remove = (id, result) => {
+    Users.remove = (id, result) => {
         sql.query("DELETE FROM USERS WHERE id = ?", id, (err, res) => {
             if (err) {
                 console.log("error: ", err);
@@ -92,7 +93,7 @@ const Deal = function(deal) {
         });
     };
     
-    Deal.removeAll = result => {
+    Users.removeAll = result => {
         sql.query("DELETE FROM USERS", (err, res) => {
             if (err) {
                 console.log("error: ", err);
@@ -105,3 +106,4 @@ const Deal = function(deal) {
         });
     };
     
+    module.exports = Users;

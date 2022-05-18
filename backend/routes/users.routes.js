@@ -1,13 +1,13 @@
 module.exports = app => {
     //импортируем наш контроллер, что бы можно было передать им функции по запросу
    
-       const deals = require("../controllers/deal.controller.js");
+       const users = require("../controllers/users.controller.js");
      
        // Создание нового дела по методу post
        //app.post("/deals", deals.create);
      
        // Получение всех дел сразу
-       app.get("/deals", deals.findAll);
+       app.get("/users", users.findAll);
      
        //Получение отдельного дела по id (на самом деле в запросе должен inner_key), но я не стал это менять
        //app.get("/deal/:dealId", deals.findOne);

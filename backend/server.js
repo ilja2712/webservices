@@ -14,9 +14,10 @@
       res.json({ message: "Это стартовая страница нашего приложения" });
     });
     
-    require("../backend/routes/deals.routes.js")(app);
+    require("./routes/users.routes.js")(app);
 
     // установить порт, и слушать запросы
-    app.listen(3003, () => {
-      console.log("Сервер запущен на 3001 порту");
+    const PORT = process.env.PORT || 8080
+    app.listen(PORT, () => {
+      console.log(`Сервер запущен на ${PORT} порту`);
     });

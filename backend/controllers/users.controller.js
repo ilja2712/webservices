@@ -1,4 +1,4 @@
-const Deal = require("../models/deal.model.js");
+const Users = require("../models/users.model.js");
 
 //Создаем и сохраняем новое дело
 exports.create = (req, res) => {
@@ -11,7 +11,7 @@ exports.create = (req, res) => {
 
   // создание своего дела
 
-  const deal = new Deal({
+  const users = new Users({
     text: req.body.text,
     inner_key: req.body.inner_key
     // у нашего дела будет текст и внутренний id, который будет использоваться как 
@@ -31,8 +31,7 @@ exports.create = (req, res) => {
 
 // Получение всех пользователей из базы данных
 exports.findAll = (req, res) => {
-
-    Deal.getAll((err, data) => {
+    Users.getAll((err, data) => {
         if (err) {
           res.status(500).send({
             message:
