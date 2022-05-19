@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { BiTrash } from "react-icons/bi";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { setDataName } from "../../data/setData";
+import { setNameCol } from "../../data/stateService";
 import { useUserContext } from "../../context/userContext";
 
 const ColumnHeader = styled.div`
@@ -36,7 +36,11 @@ const ColumnElement = ({ prefix, elements, id }) => {
   const setColumnName = (e) => {
     console.log(e.target.value);
     setName(e.target.value);
-    setDataName(e.target.value, uid, id);
+
+    const data = {
+      name: e.target.value
+    }
+    setNameCol(data, id, uid);
   };
 
   return ( <DroppableStyles>

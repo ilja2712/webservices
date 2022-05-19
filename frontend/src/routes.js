@@ -2,7 +2,7 @@ import React from "react";
 import { Redirect } from "react-router-dom";
 
 // Layout Types
-import { DefaultAuthLayout, DefaultLayout } from "./layouts";
+import { DefaultLayout } from "./layouts";
 
 // Route Views
 import BlogOverview from "./views/BlogOverview";

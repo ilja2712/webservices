@@ -1,16 +1,9 @@
 import React, { useEffect } from 'react';
-import getLists from "../../data/getData";
+import get from "../../data/stateService";
 import styled from "styled-components";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  ListGroup,
-  ListGroupItem,
-  Button
-} from "shards-react";
+//import {} from "shards-react";
 
 const ListGrid = styled.div`
   display: grid;
@@ -42,34 +35,39 @@ const addToList = (list, index, element) => {
   return result;
 };
 
-  const arr = [];
-  const lists = [];
-
- /** Генерация новых задач */
- const generateLists = () => 
- lists.reduce(
-     (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey)}),
- {});
+const arr = [];
+const lists =[];
+  
+/** Генерация новых задач */
+const generateLists = () => 
+lists.reduce(
+    (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey)}),
+{});
 
 function TaskTable() {
 
   const [elements, setElements] = React.useState();
-
-  /** Получение списка колонок задач */
-  getLists().then(data => {
-    if (lists.length == 0) {
-      for (const doc of data.docs) {
-        arr.push(doc.data());
-      }
-      arr.map(list => {list["columns"].forEach(col => {lists.push(col)})});
-      setElements(generateLists());
+  
+  get().then(response => {
+    if(lists.length == 0) {
+      for (const doc of response.data) {
+      arr.push(doc);
     }
+    arr.map(list => {lists.push(list["Name"])});
+  }
   }).catch(error => {
     console.error(error);
   });
 
   useEffect(() => {
-    setElements(generateLists());
+    let mounted = true;
+    setTimeout(() => {
+      if(mounted) {
+        setElements(generateLists());
+      } 
+    }, 200);
+
+    return () => mounted = false;
   }, []);
 
   /** Отрисовка конечного положения задач в столбцах */
