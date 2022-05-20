@@ -40,12 +40,12 @@ const Task = ({ item, index }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <CardHeader>Задача</CardHeader>
-            <span>Content</span>
+            <CardHeader>Task-{item.id}: <span>{item.content}</span></CardHeader>
+            <span>{item.description}</span>
             <CardFooter>
-              <span>{item.content}</span>
+              <span>{item.priority}</span>
               <Author>
-                {item.id}
+                {item.date_task}
               </Author>
             </CardFooter>
           </DragItem>

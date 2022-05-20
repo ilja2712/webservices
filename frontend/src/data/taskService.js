@@ -1,5 +1,3 @@
-import { db } from "./firebase.config";
-import { collection, getDocs, ref } from 'firebase/firestore';
 import http from './http-common';
 import { useUserContext } from "../context/userContext";
 /*
@@ -8,13 +6,16 @@ const getUid = () => {
     return uid;
 }*/
 
-const getState = () => {
-    const { uid } = useUserContext();
-    return http.get("/state/" + uid);
+// получение задач конкретного пользователя 
+const getTask = (uid) => {
+    return http.get("/task/" + uid);
 }
 
+/*
 export const setNameCol = (name, id, uid) => {
+    //const { uid } = useUserContext();
     return http.put(`/state/${uid}/${id}`, name);
 }
+*/
 
-export default getState;
+export default getTask;

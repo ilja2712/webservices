@@ -49,8 +49,7 @@ const ColumnElement = ({ prefix, elements, id }) => {
               <div className="columnButton"><input className="mxw150 fieldColumnName form-control-plaintext"
                                                   onChange={setColumnName}
                                                   contentEditable="false" 
-                                                  defaultValue={columnName} 
-                                                  onClick={handleClick}>
+                                                  defaultValue={columnName}>
                                             </input></div>
               <div className="columnButton right-align">
                 <BiTrash size={30} color="red"/>

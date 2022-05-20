@@ -21,6 +21,7 @@
     
     require("./routes/users.routes.js")(app);
     require("./routes/state.routes.js")(app);
+    require("./routes/task.routes.js")(app);
 
     // установить порт, и слушать запросы
     const PORT = process.env.PORT || 8080

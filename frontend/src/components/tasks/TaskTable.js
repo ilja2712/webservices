@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
-import get from "../../data/stateService";
+import getState from "../../data/stateService";
+import getTask from "../../data/taskService";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
+import { useUserContext } from "../../context/userContext";
 //import {} from "shards-react";
 
 const ListGrid = styled.div`
@@ -11,15 +13,16 @@ const ListGrid = styled.div`
   grid-gap: 8px;
 `;
 
-// fake data generator
-const getItems = (count, prefix) =>
-// создание массива
-  Array.from({ length: count }, (v, k) => k).map((k) => {
-    const randomId = Math.floor(Math.random() * 1000);
+// отображение задач
+const getItems = (prefix, el) => 
+  Array.from(el, e => {
     return {
-      id: `item-${randomId}`,
+      id: `${e['ID_TASK']}`,
       prefix,
-      content: `item ${randomId}`
+      content: e['Name'],
+      description: e['Description'],
+      priority: e['Priority'],
+      date_task: e['Date_Task']
     };
   });
 
@@ -37,18 +40,28 @@ const addToList = (list, index, element) => {
 
 const arr = [];
 const lists =[];
+const el = [];
   
 /** Генерация новых задач */
 const generateLists = () => 
 lists.reduce(
-    (acc, listKey) => ({ ...acc, [listKey]: getItems(10, listKey)}),
+    (acc, listKey) => ({ ...acc, [listKey]: getItems(listKey, el.filter(e => e['State'] == listKey))}),
 {});
 
 function TaskTable() {
 
   const [elements, setElements] = React.useState();
+  const { uid } = useUserContext();
+
+  getTask(uid).then(response => {
+    if (el.length == 0) {
+      for (const doc of response.data) {
+        el.push(doc);
+      }
+    }
+  })
   
-  get().then(response => {
+  getState().then(response => {
     if(lists.length == 0) {
       for (const doc of response.data) {
       arr.push(doc);
@@ -65,7 +78,7 @@ function TaskTable() {
       if(mounted) {
         setElements(generateLists());
       } 
-    }, 200);
+    }, 400);
 
     return () => mounted = false;
   }, []);
