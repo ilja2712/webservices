@@ -12,9 +12,8 @@ module.exports = app => {
        // Получение задач конкретного пользователя
        app.get("/task/:user_id", task.findOne);
 
-       // обновить дело по id
-       // здесь тоже самое про inner_key
-       //app.put("/state/:user_id/:state_id", state.update);
+       // обновить состояние по id
+       app.put("/task/:user_id/:task_id", task.updateState);
      
        //Получение отдельного дела по id (на самом деле в запросе должен inner_key), но я не стал это менять
        //app.get("/deal/:dealId", deals.findOne);

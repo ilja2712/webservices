@@ -1,11 +1,12 @@
 import { Droppable } from "react-beautiful-dnd";
 import Task from "./Task";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { BiTrash } from "react-icons/bi";
 import { IoAddCircleOutline } from "react-icons/io5";
 import { setNameCol } from "../../data/stateService";
 import { useUserContext } from "../../context/userContext";
+import ModalCreateTask from "./modalTask";
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -32,6 +33,7 @@ const ColumnElement = ({ prefix, elements, id }) => {
 
   const [columnName, setName] = useState(prefix);
   const { uid } = useUserContext();
+  const [tasks, addTasks] = useState(elements);
 
   const setColumnName = (e) => {
     console.log(e.target.value);
@@ -41,6 +43,19 @@ const ColumnElement = ({ prefix, elements, id }) => {
       name: e.target.value
     }
     setNameCol(data, id, uid);
+  };
+
+  const handleAddTask = () => {
+      console.log(columnName);
+     /* addTasks(elements.push({
+        id: '3',
+        content: '234',
+        description: 'dsfdsfdsfs',
+        priority: "Slow",
+        date_task: '12.05.2023',
+        prefix: columnName
+      }))*/
+      console.log(elements);
   };
 
   return ( <DroppableStyles>
@@ -57,6 +72,7 @@ const ColumnElement = ({ prefix, elements, id }) => {
                 </div>
           </div>
         </ColumnHeader>
+        <hr></hr>
       <Droppable droppableId={`${columnName}`}>
         {(provided) => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
@@ -64,6 +80,8 @@ const ColumnElement = ({ prefix, elements, id }) => {
               <Task key={item.id} item={item} index={index} />
             ))}
             {provided.placeholder}
+            <center><IoAddCircleOutline size={30} color="brown" onClick={handleAddTask}/></center>
+            <ModalCreateTask />
           </div>
         )}
       </Droppable>

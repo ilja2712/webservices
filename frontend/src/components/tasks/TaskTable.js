@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import getState from "../../data/stateService";
-import getTask from "../../data/taskService";
+import getTask, { setStateTask } from "../../data/taskService";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
@@ -32,8 +32,10 @@ const removeFromList = (list, index) => {
   return [removed, result];
 };
 
-const addToList = (list, index, element) => {
+const addToList = (list, index, element, uid, state) => {
   const result = Array.from(list);
+  element.prefix = state;
+  setStateTask(element, uid);
   result.splice(index, 0, element);
   return result;
 };
@@ -78,7 +80,7 @@ function TaskTable() {
       if(mounted) {
         setElements(generateLists());
       } 
-    }, 400);
+    }, 500);
 
     return () => mounted = false;
   }, []);
@@ -97,12 +99,15 @@ function TaskTable() {
     sourceList,
     result.source.index
   );
+
   listCopy[result.source.droppableId] = newSourceList;
   const destinationList = listCopy[result.destination.droppableId];
   listCopy[result.destination.droppableId] = addToList(
     destinationList,
     result.destination.index,
-    removedElement
+    removedElement,
+    uid,
+    result.destination.droppableId
   );
 
   setElements(listCopy);

@@ -2,11 +2,39 @@ const sql = require("./db.js");
 
 // конструктор состояния
 const Task = function(task) {
-    this.name = task.name;
+    this.name = task.content;
     this.description = task.description;
     this.date_task = task.date_task;
     this.priority = task.priority;
+    this.state_task = task.prefix;
+    this.id = task.id;
   };
+
+  Task.updateByIdTaskState = (user_id, task_id, task, result) => {
+    sql.query(`UPDATE task 
+                join state
+                join task_table
+                join users
+                on (state.ID_TABLE = task_table.ID_TABLE and task_table.ID_USERS = users.ID_USERS and users.ID_FIREBASE = '${user_id}')
+                SET task.ID_STATE = state.ID_STATE
+                where state.Name = '${task.state_task}' and task.ID_TASK = '${task.id}'`,
+        (err, res) => {
+        if (err) {
+            console.log("Ошибка: ", err);
+            result(null, err);
+            return;
+        }
+
+        if (res.affectedRows == 0) {
+            result({ kind: "не найдено" }, null);
+            return;
+        }
+
+        console.log("Обновлен столбец: ", { task_id: task_id, ...task_id });
+        result(null, { task_id: task_id, ...task_id });
+        }
+    );
+};
 
 // нахождение тасков по одному пользователю 
 Task.findById = (user_id, result) => {

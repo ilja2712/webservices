@@ -11,6 +11,11 @@ const getTask = (uid) => {
     return http.get("/task/" + uid);
 }
 
+export const setStateTask = (data, uid) => {
+    console.log(data);
+    return http.put(`/task/${uid}/${data.id}`, data)
+}
+
 /*
 export const setNameCol = (name, id, uid) => {
     //const { uid } = useUserContext();
