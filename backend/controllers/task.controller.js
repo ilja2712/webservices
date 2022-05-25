@@ -21,7 +21,7 @@ exports.findOne = (req, res) => {
     });
   }
 
-  // поиск всех столбцов одного пользователя
+  // обновление статуса
 exports.updateState = (req, res) => {
   if (!req.body) {
     res.status(400).send({

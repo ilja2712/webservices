@@ -6,7 +6,7 @@ const Task = function(task) {
     this.description = task.description;
     this.date_task = task.date_task;
     this.priority = task.priority;
-    this.state_task = task.prefix;
+    this.status = task.status;
     this.id = task.id;
   };
 
@@ -17,7 +17,7 @@ const Task = function(task) {
                 join users
                 on (state.ID_TABLE = task_table.ID_TABLE and task_table.ID_USERS = users.ID_USERS and users.ID_FIREBASE = '${user_id}')
                 SET task.ID_STATE = state.ID_STATE
-                where state.Name = '${task.state_task}' and task.ID_TASK = '${task.id}'`,
+                where state.Name = '${task.status}' and task.ID_TASK = '${task.id}'`,
         (err, res) => {
         if (err) {
             console.log("Ошибка: ", err);

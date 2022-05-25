@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
-import getState from "../../data/stateService";
-import getTask, { setStateTask } from "../../data/taskService";
+import React, { useEffect, useState } from 'react';
+import getState from "../../services/stateService";
+import TaskService from "../../services/taskService";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
 import { useUserContext } from "../../context/userContext";
-//import {} from "shards-react";
+import { updateTaskStatus } from "../../slices/tasks";
+import { useDispatch } from "react-redux";
 
 const ListGrid = styled.div`
   display: grid;
@@ -26,24 +27,10 @@ const getItems = (prefix, el) =>
     };
   });
 
-const removeFromList = (list, index) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(index, 1);
-  return [removed, result];
-};
-
-const addToList = (list, index, element, uid, state) => {
-  const result = Array.from(list);
-  element.prefix = state;
-  setStateTask(element, uid);
-  result.splice(index, 0, element);
-  return result;
-};
-
 const arr = [];
 const lists =[];
 const el = [];
-  
+
 /** Генерация новых задач */
 const generateLists = () => 
 lists.reduce(
@@ -53,15 +40,58 @@ lists.reduce(
 function TaskTable() {
 
   const [elements, setElements] = React.useState();
+  const [currentTask, setCurrentTask] = useState(initialTaskState);
   const { uid } = useUserContext();
 
-  getTask(uid).then(response => {
-    if (el.length == 0) {
-      for (const doc of response.data) {
-        el.push(doc);
-      }
-    }
-  })
+  // удаление задачи из старой колонки
+  const removeFromList = (list, index) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(index, 1);
+    return [removed, result];
+  };
+
+  // добавление задачи в новой колонке
+  const addToList = (list, index, element, uid, state) => {
+    const result = Array.from(list);
+    element.status = state;
+    element.uid = uid;
+    updateStatus(element);
+    result.splice(index, 0, element);
+    return result;
+  };
+
+  const dispatch = useDispatch();
+
+  const initialTaskState = {
+    id: null,
+    title: "",
+    description: "",
+    date_task: "",
+    status: "",
+    priority: ""
+  }
+
+  // обновление статуса задачи в БД
+  const updateStatus = (element) => {
+    dispatch(updateTaskStatus(element))
+    .unwrap()
+    .then(response => {
+      console.log(response);
+      setCurrentTask({...currentTask, status: element.status});
+    });
+  }
+
+  const getTask = uid => {
+    TaskService.get(uid)
+      .then(response => {
+        for (const doc of response.data) {
+          el.push(doc);
+        }
+      })
+      .catch(e => {
+        console.log(e);
+      })
+  }
   
   getState().then(response => {
     if(lists.length == 0) {
@@ -75,13 +105,13 @@ function TaskTable() {
   });
 
   useEffect(() => {
+    getTask(uid);
     let mounted = true;
     setTimeout(() => {
       if(mounted) {
         setElements(generateLists());
       } 
     }, 500);
-
     return () => mounted = false;
   }, []);
 

@@ -4,9 +4,9 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { BiTrash } from "react-icons/bi";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { setNameCol } from "../../data/stateService";
+import { setNameCol } from "../../services/stateService";
 import { useUserContext } from "../../context/userContext";
-import ModalCreateTask from "./modalTask";
+import CreateTask from "./AddTask";
 
 const ColumnHeader = styled.div`
   text-transform: uppercase;
@@ -66,7 +66,7 @@ const ColumnElement = ({ prefix, elements, id }) => {
               <Task key={item.id} item={item} index={index} />
             ))}
             {provided.placeholder}
-            <ModalCreateTask elements={elements} columnName={columnName} />
+            <CreateTask columnName={columnName} />
           </div>
         )}
       </Droppable>

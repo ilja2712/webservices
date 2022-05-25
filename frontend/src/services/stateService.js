@@ -1,6 +1,4 @@
-import { db } from "./firebase.config";
-import { collection, getDocs, ref } from 'firebase/firestore';
-import http from './http-common';
+import http from '../http-common';
 import { useUserContext } from "../context/userContext";
 /*
 const getUid = () => {
