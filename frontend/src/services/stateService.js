@@ -6,13 +6,17 @@ const getUid = () => {
     return uid;
 }*/
 
-const getState = () => {
-    const { uid } = useUserContext();
+const get = (uid) => {
     return http.get("/state/" + uid);
 }
 
-export const setNameCol = (name, id, uid) => {
-    return http.put(`/state/${uid}/${id}`, name);
+export const updateStateName = (id, data) => {
+    return http.put(`/state/${data.uid}/${id}`, data);
 }
 
-export default getState;
+const StateService = {
+    get,
+    updateStateName
+};
+
+export default StateService;

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import getState from "../../services/stateService";
+import StateService from "../../services/stateService";
 import TaskService from "../../services/taskService";
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
 import { useUserContext } from "../../context/userContext";
 import { updateTaskStatus } from "../../slices/tasks";
-import { useDispatch } from "react-redux";
+import { selectAllStates, findStateByUserID } from "../../slices/states";
+import { useDispatch, useSelector } from "react-redux";
 
 const ListGrid = styled.div`
   display: grid;
@@ -39,12 +40,15 @@ lists.reduce(
 
 function TaskTable() {
 
+  const states = useSelector(selectAllStates);
+
   const [elements, setElements] = React.useState();
   const [currentTask, setCurrentTask] = useState(initialTaskState);
   const { uid } = useUserContext();
 
   // удаление задачи из старой колонки
   const removeFromList = (list, index) => {
+    console.log(states.states);
     const result = Array.from(list);
     const [removed] = result.splice(index, 1);
     return [removed, result];
@@ -81,6 +85,29 @@ function TaskTable() {
     });
   }
 
+  // получить столбцы из БД
+  const getState = uid => {
+    /*StateService.get(uid)
+      .then(response => {
+        for (const doc of response.data) {
+          arr.push(doc);
+        }
+        arr.map(list => {lists.push(list["Name"])});
+      })
+      .catch(e => {
+        console.error(e);
+      })*/
+      dispatch(findStateByUserID(uid))
+        .unwrap()
+        .then(response => {
+          for (const doc of response.data) {
+            arr.push(doc);
+          }
+          arr.map(list => {lists.push(list["Name"])});
+        })
+  }
+
+  // получить список задач из БД 
   const getTask = uid => {
     TaskService.get(uid)
       .then(response => {
@@ -89,23 +116,13 @@ function TaskTable() {
         }
       })
       .catch(e => {
-        console.log(e);
+        console.error(e);
       })
   }
-  
-  getState().then(response => {
-    if(lists.length == 0) {
-      for (const doc of response.data) {
-      arr.push(doc);
-    }
-    arr.map(list => {lists.push(list["Name"])});
-  }
-  }).catch(error => {
-    console.error(error);
-  });
 
   useEffect(() => {
     getTask(uid);
+    getState(uid);
     let mounted = true;
     setTimeout(() => {
       if(mounted) {

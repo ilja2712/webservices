@@ -4,8 +4,9 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { BiTrash } from "react-icons/bi";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { setNameCol } from "../../services/stateService";
+import { updateStateName } from "../../slices/states";
 import { useUserContext } from "../../context/userContext";
+import { useDispatch } from "react-redux";
 import CreateTask from "./AddTask";
 
 const ColumnHeader = styled.div`
@@ -23,25 +24,28 @@ const handleAddColumn = () => {
     
 };
 
-const handleClick = () => {
-   
-};
-
-
-
 const ColumnElement = ({ prefix, elements, id }) => {
 
-  const [columnName, setName] = useState(prefix);
+  const dispatch = useDispatch();
+
+  const [columnName, setColName] = useState(prefix);
   const { uid } = useUserContext();
 
   const setColumnName = (e) => {
-    console.log(e.target.value);
-    setName(e.target.value);
-
     const data = {
-      name: e.target.value
+      id: id,
+      name: e.target.value,
+      uid: uid
     }
-    setNameCol(data, id, uid);
+    dispatch(updateStateName(data))
+    .unwrap()
+    .then(response => {
+      console.log(response);
+      setColName(e.target.value);
+    })
+    .catch(e => {
+      console.error(e);
+    });
   };
 
   return ( <DroppableStyles>

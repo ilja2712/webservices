@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import TaskService from "../services/taskService";
+import StateService from "../services/stateService";
 
 const initialState = [];
 
+/*
 export const createTask = createAsyncThunk(
   "task/create",
   async ({ head, description, date_task, priority, status }, uid) => {
@@ -10,55 +11,56 @@ export const createTask = createAsyncThunk(
     return res.data;
   }
 );
+*/
 
-export const findTaskByUserID = createAsyncThunk(
-  "task/findByUID",
+export const findStateByUserID = createAsyncThunk(
+  "state/findByUID",
   async (uid) => {
-    const res = await TaskService.get(uid);
+    const res = await StateService.get(uid);
     return res.data;
   }
 );
 
-export const updateTaskStatus = createAsyncThunk(
-  "task/updateTaskStatus",
-  async ({ id, status, uid }) => {
-    const res = await TaskService.updateStatus({ id, status, uid });
+export const updateStateName = createAsyncThunk(
+  "state/updateStateName",
+  async ({ id, name, uid }) => {
+    const res = await StateService.updateStateName(id, { name, uid });
     return res.data;
   }
 );
 
-const taskSlice = createSlice({
-  name: "task",
+const stateSlice = createSlice({
+  name: "state",
   initialState,
   extraReducers: {
-    [createTask.fulfilled]: (state, action) => {
+   /*[createState.fulfilled]: (state, action) => {
       state.push(action.payload);
     },
-    /*[retrieveTutorials.fulfilled]: (state, action) => {
+    [retrieveTutorials.fulfilled]: (state, action) => {
       return [...action.payload];
     },*/
-    [updateTaskStatus.fulfilled]: (state, action) => {
-      const index = state.findIndex(tutorial => tutorial.id === action.payload.id);
+    [updateStateName.fulfilled]: (state, action) => {
+      const index = state.findIndex(stat => stat.id === action.payload.id);
       state[index] = {
         ...state[index],
         ...action.payload,
       };
     },
-    /*
-    [deleteTutorial.fulfilled]: (state, action) => {
+    /*[deleteTutorial.fulfilled]: (state, action) => {
       let index = state.findIndex(({ id }) => id === action.payload.id);
       state.splice(index, 1);
     },
     [deleteAllTutorials.fulfilled]: (state, action) => {
       return [];
     },*/
-    [findTaskByUserID.fulfilled]: (state, action) => {
-      state.push(action.payload);
-      console.log(state);
+    [findStateByUserID.fulfilled]: (state, action) => {
+      console.log(action.payload);
       return [...action.payload];
     },
   },
 });
 
-const { reducer } = taskSlice;
+export const selectAllStates = (state) => state;
+
+const { reducer } = stateSlice;
 export default reducer;

@@ -12,7 +12,6 @@ const get = (uid) => {
 }
 
 const updateStatus = (data) => {
-    console.log(data.uid);
     return http.put(`/task/${data.uid}/${data.id}`, data)
 }
 

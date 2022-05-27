@@ -75,8 +75,8 @@ const State = function(state) {
                 return;
             }
     
-            console.log("Обновлен столбец: ", { state_id: state_id, ...state_id });
-            result(null, { state_id: state_id, ...state_id });
+            console.log("Обновлен столбец: ", { state_id: state.name, ...state_id });
+            result(null, { state_id: state.name, ...state_id });
             }
         );
     };
