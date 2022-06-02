@@ -24,11 +24,11 @@ const handleAddColumn = () => {
     
 };
 
-const ColumnElement = ({ prefix, elements, id }) => {
+const ColumnElement = ({ status, elements, id }) => {
 
   const dispatch = useDispatch();
 
-  const [columnName, setColName] = useState(prefix);
+  const [columnName, setColName] = useState(status);
   const { uid } = useUserContext();
 
   const setColumnName = (e) => {
@@ -63,17 +63,17 @@ const ColumnElement = ({ prefix, elements, id }) => {
           </div>
         </ColumnHeader>
         <hr></hr>
-      <Droppable droppableId={`${columnName}`}>
-        {(provided) => (
-          <div {...provided.droppableProps} ref={provided.innerRef}>
-            {elements.map((item, index) => (
-              <Task key={item.id} item={item} index={index} />
-            ))}
-            {provided.placeholder}
-            <CreateTask columnName={columnName} />
-          </div>
-        )}
-      </Droppable>
+        <Droppable droppableId={`${columnName}`}>
+          {(provided) => (
+            <div {...provided.droppableProps} ref={provided.innerRef}>
+              {elements.map((item, index) => (
+                <Task key={item.id} item={item} index={index} />
+              ))}
+              {provided.placeholder}
+              <CreateTask columnName={columnName} />
+            </div>
+          )}
+        </Droppable>
     </DroppableStyles>)
 };
 

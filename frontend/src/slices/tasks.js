@@ -38,9 +38,9 @@ const taskSlice = createSlice({
       return [...action.payload];
     },*/
     [updateTaskStatus.fulfilled]: (state, action) => {
-      const index = state.findIndex(tutorial => tutorial.id === action.payload.id);
-      state[index] = {
-        ...state[index],
+      //const index = state.findIndex(task => task.id === action.payload.id);
+      state[action.payload['ID_TASK']] = {
+        ...state[action.payload['ID_TASK']],
         ...action.payload,
       };
     },
@@ -53,12 +53,13 @@ const taskSlice = createSlice({
       return [];
     },*/
     [findTaskByUserID.fulfilled]: (state, action) => {
-      state.push(action.payload);
-      console.log(state);
+      state = action.payload;
       return [...action.payload];
     },
   },
 });
+
+export const selectAllTask = (state) => state.tasks;
 
 const { reducer } = taskSlice;
 export default reducer;

@@ -31,7 +31,7 @@ const Task = function(task) {
         }
 
         console.log("Обновлен столбец: ", { task_id: task_id, ...task_id });
-        result(null, { task_id: task_id, ...task_id });
+        result(null, { ID_TASK: Number(task_id), State: task.status });
         }
     );
 };

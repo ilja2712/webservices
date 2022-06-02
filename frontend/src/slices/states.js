@@ -40,9 +40,9 @@ const stateSlice = createSlice({
       return [...action.payload];
     },*/
     [updateStateName.fulfilled]: (state, action) => {
-      const index = state.findIndex(stat => stat.id === action.payload.id);
-      state[index] = {
-        ...state[index],
+      //const index = state.findIndex(stat => stat.id === action.payload['ID_STATE']);
+      state[action.payload['ID_STATE']] = {
+        ...state[action.payload['ID_STATE']],
         ...action.payload,
       };
     },
@@ -54,13 +54,13 @@ const stateSlice = createSlice({
       return [];
     },*/
     [findStateByUserID.fulfilled]: (state, action) => {
-      console.log(action.payload);
+      state = action.payload;
       return [...action.payload];
     },
   },
 });
 
-export const selectAllStates = (state) => state;
+export const selectAllStates = (state) => state.states;
 
 const { reducer } = stateSlice;
 export default reducer;

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import StateService from "../../services/stateService";
-import TaskService from "../../services/taskService";
+import React, { useEffect, useState, useCallback } from 'react';
 import styled from "styled-components";
 import { DragDropContext } from "react-beautiful-dnd";
 import ColumnElement from "./ColumnElement";
 import { useUserContext } from "../../context/userContext";
 import { updateTaskStatus } from "../../slices/tasks";
 import { selectAllStates, findStateByUserID } from "../../slices/states";
+import { findTaskByUserID } from "../../slices/tasks";
+import { selectAllTask } from "../../slices/tasks";
 import { useDispatch, useSelector } from "react-redux";
 
 const ListGrid = styled.div`
@@ -15,12 +15,12 @@ const ListGrid = styled.div`
   grid-gap: 8px;
 `;
 
-// отображение задач
-const getItems = (prefix, el) => 
+  // отображение задач
+  const getItems = (status, el) => 
   Array.from(el, e => {
     return {
       id: `${e['ID_TASK']}`,
-      prefix,
+      status,
       content: e['Name'],
       description: e['Description'],
       priority: e['Priority'],
@@ -28,109 +28,102 @@ const getItems = (prefix, el) =>
     };
   });
 
-const arr = [];
-const lists =[];
-const el = [];
-
-/** Генерация новых задач */
-const generateLists = () => 
-lists.reduce(
-    (acc, listKey) => ({ ...acc, [listKey]: getItems(listKey, el.filter(e => e['State'] == listKey))}),
-{});
-
 function TaskTable() {
 
+  const initialTaskState = {
+    id: null,
+    content: "",
+    description: "",
+    date_task: "",
+    status: "",
+    priority: "",
+    uid: ""
+  }
+
   const states = useSelector(selectAllStates);
+  const tasks = useSelector(selectAllTask);
 
   const [elements, setElements] = React.useState();
   const [currentTask, setCurrentTask] = useState(initialTaskState);
   const { uid } = useUserContext();
 
+  const dispatch = useDispatch();
+
+  /** Генерация новых задач */
+  const generateLists = () => 
+  states.reduce(
+    (acc, listKey) => ({ ...acc, [listKey['Name']]: getItems(listKey['Name'], tasks.filter(task => task['State'] == listKey['Name']))}),
+  {});
+
   // удаление задачи из старой колонки
   const removeFromList = (list, index) => {
-    console.log(states.states);
     const result = Array.from(list);
     const [removed] = result.splice(index, 1);
     return [removed, result];
   };
 
   // добавление задачи в новой колонке
-  const addToList = (list, index, element, uid, state) => {
+  const addToList = (list, index, element) => {
     const result = Array.from(list);
-    element.status = state;
-    element.uid = uid;
-    updateStatus(element);
+    updateStatus();
     result.splice(index, 0, element);
     return result;
   };
 
-  const dispatch = useDispatch();
-
-  const initialTaskState = {
-    id: null,
-    title: "",
-    description: "",
-    date_task: "",
-    status: "",
-    priority: ""
-  }
-
   // обновление статуса задачи в БД
-  const updateStatus = (element) => {
-    dispatch(updateTaskStatus(element))
+  const updateStatus = () => {
+    dispatch(updateTaskStatus(initialTaskState))
     .unwrap()
     .then(response => {
       console.log(response);
-      setCurrentTask({...currentTask, status: element.status});
     });
   }
 
   // получить столбцы из БД
-  const getState = uid => {
-    /*StateService.get(uid)
-      .then(response => {
-        for (const doc of response.data) {
-          arr.push(doc);
-        }
-        arr.map(list => {lists.push(list["Name"])});
-      })
-      .catch(e => {
-        console.error(e);
-      })*/
+  const getState = useCallback(uid => {
       dispatch(findStateByUserID(uid))
         .unwrap()
         .then(response => {
-          for (const doc of response.data) {
-            arr.push(doc);
-          }
-          arr.map(list => {lists.push(list["Name"])});
+          console.log(response);
         })
-  }
+  }, [dispatch])
 
   // получить список задач из БД 
-  const getTask = uid => {
-    TaskService.get(uid)
+  const getTask = useCallback(uid => {
+    dispatch(findTaskByUserID(uid))
+      .unwrap()
       .then(response => {
-        for (const doc of response.data) {
-          el.push(doc);
-        }
+        console.log(response);
       })
       .catch(e => {
         console.error(e);
       })
-  }
+  }, [dispatch]);
 
   useEffect(() => {
-    getTask(uid);
-    getState(uid);
     let mounted = true;
     setTimeout(() => {
-      if(mounted) {
-        setElements(generateLists());
-      } 
-    }, 500);
+      if (mounted) {
+        if (states.length == 0) {
+          getState(uid);
+          getTask(uid);
+          console.log('getState')
+        }
+      }
+    }, 200);
     return () => mounted = false;
-  }, []);
+  })
+
+  useEffect(() => {
+    let mounted = true;
+    setTimeout(() => {
+      if (mounted) {
+        setElements(generateLists());
+        console.log('setElements')
+      } 
+    }, 600);
+    return () => mounted = false;
+  }, [tasks])
 
   /** Отрисовка конечного положения задач в столбцах */
   const onDragEnd = (result) => {
@@ -152,27 +145,28 @@ function TaskTable() {
   listCopy[result.destination.droppableId] = addToList(
     destinationList,
     result.destination.index,
-    removedElement,
-    uid,
-    result.destination.droppableId
+    removedElement
   );
 
   setElements(listCopy);
   };
 
   return (
-  <DragDropContext onDragEnd={onDragEnd}>
-    <ListGrid>
-      {lists.map((listKey, idx) => (
-        <ColumnElement
-          elements={elements[listKey]}
-          key={listKey}
-          prefix={listKey}
-          id={idx}
-        />
-      ))}
-    </ListGrid>
-  </DragDropContext>
+  <>{(elements) ? 
+      <DragDropContext onDragEnd={onDragEnd}>
+          <ListGrid>
+            {states && states.map((listKey, idx) => (
+              <ColumnElement
+                elements={elements[listKey['Name']]}
+                key={listKey['Name']}
+                status={listKey['Name']}
+                id={idx}
+              />
+            ))}
+          </ListGrid>
+        
+      </DragDropContext>
+    : null}</>
   );
 }
 
