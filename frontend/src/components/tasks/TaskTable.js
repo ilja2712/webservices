@@ -42,8 +42,6 @@ function TaskTable() {
 
   const states = useSelector(selectAllStates);
   const tasks = useSelector(selectAllTask);
-
-  const [elements, setElements] = React.useState();
   const [currentTask, setCurrentTask] = useState(initialTaskState);
   const { uid } = useUserContext();
 
@@ -55,6 +53,8 @@ function TaskTable() {
     (acc, listKey) => ({ ...acc, [listKey['Name']]: getItems(listKey['Name'], tasks.filter(task => task['State'] == listKey['Name']))}),
   {});
 
+  const [elements, setElements] = React.useState();
+
   // удаление задачи из старой колонки
   const removeFromList = (list, index) => {
     const result = Array.from(list);
@@ -63,20 +63,24 @@ function TaskTable() {
   };
 
   // добавление задачи в новой колонке
-  const addToList = (list, index, element) => {
+  const addToList = (list, index, element, status) => {
     const result = Array.from(list);
-    updateStatus();
+    element.status = status;
+    element.uid = uid;
+    setCurrentTask(element);
+    updateStatus(element);
     result.splice(index, 0, element);
     return result;
   };
 
   // обновление статуса задачи в БД
-  const updateStatus = () => {
-    dispatch(updateTaskStatus(initialTaskState))
+  const updateStatus = (element) => {
+    dispatch(updateTaskStatus(element))
     .unwrap()
     .then(response => {
       console.log(response);
     });
+
   }
 
   // получить столбцы из БД
@@ -110,7 +114,7 @@ function TaskTable() {
           console.log('getState')
         }
       }
-    }, 200);
+    }, 100);
     return () => mounted = false;
   })
 
@@ -119,9 +123,10 @@ function TaskTable() {
     setTimeout(() => {
       if (mounted) {
         setElements(generateLists());
-        console.log('setElements')
+        console.log('setElements');
       } 
-    }, 600);
+    }, 100);
+    console.log(elements);
     return () => mounted = false;
   }, [tasks])
 
@@ -145,7 +150,8 @@ function TaskTable() {
   listCopy[result.destination.droppableId] = addToList(
     destinationList,
     result.destination.index,
-    removedElement
+    removedElement,
+    result.destination.droppableId
   );
 
   setElements(listCopy);
@@ -155,7 +161,7 @@ function TaskTable() {
   <>{(elements) ? 
       <DragDropContext onDragEnd={onDragEnd}>
           <ListGrid>
-            {states && states.map((listKey, idx) => (
+            {states && tasks && states.map((listKey, idx) => (
               <ColumnElement
                 elements={elements[listKey['Name']]}
                 key={listKey['Name']}

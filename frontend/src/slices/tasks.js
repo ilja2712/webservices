@@ -22,6 +22,7 @@ export const findTaskByUserID = createAsyncThunk(
 export const updateTaskStatus = createAsyncThunk(
   "task/updateTaskStatus",
   async ({ id, status, uid }) => {
+    console.log(id, status, uid);
     const res = await TaskService.updateStatus({ id, status, uid });
     return res.data;
   }
@@ -38,9 +39,9 @@ const taskSlice = createSlice({
       return [...action.payload];
     },*/
     [updateTaskStatus.fulfilled]: (state, action) => {
-      //const index = state.findIndex(task => task.id === action.payload.id);
-      state[action.payload['ID_TASK']] = {
-        ...state[action.payload['ID_TASK']],
+      const index = state.findIndex(task => task.id === action.payload['ID_TASK']);
+      state[index] = {
+        ...state[index],
         ...action.payload,
       };
     },

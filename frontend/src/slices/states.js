@@ -45,6 +45,7 @@ const stateSlice = createSlice({
         ...state[action.payload['ID_STATE']],
         ...action.payload,
       };
+      console.log(state[action.payload['ID_STATE']])
     },
     /*[deleteTutorial.fulfilled]: (state, action) => {
       let index = state.findIndex(({ id }) => id === action.payload.id);
