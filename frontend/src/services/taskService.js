@@ -1,29 +1,32 @@
 import http from '../http-common';
-import { useUserContext } from "../context/userContext";
-/*
-const getUid = () => {
-    const { uid } = useUserContext();
-    return uid;
-}*/
 
 // получение задач конкретного пользователя 
 const get = (uid) => {
     return http.get("/task/" + uid);
 }
 
+// обновление статуса задачи
 const updateStatus = (data) => {
     return http.put(`/task/${data.uid}/${data.id}`, data)
 }
 
-const create = (data, uid) => {
-    return http.post(`/task/${uid}`, data);
+// создание новой задачи
+const create = (data) => {
+    console.log(data);
+    return http.post(`/task/${data.uid}`, data);
 };
+
+// удаление задачи
+const remove = id => {
+    return http.delete(`/task/${id}`);
+  };
 
 
 const TaskService = {
     get,
     updateStatus,
-    create
+    create,
+    remove
 };
 
 export default TaskService;

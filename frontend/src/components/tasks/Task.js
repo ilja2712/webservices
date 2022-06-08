@@ -1,6 +1,11 @@
 import { Draggable } from "react-beautiful-dnd";
 import React, { useMemo } from "react";
 import styled, { css } from "styled-components";
+import { BiTrash } from "react-icons/bi";
+import { Badge } from "shards-react";
+import { useDispatch } from "react-redux";
+import { findTaskByUserID, deleteTask } from "../../slices/tasks";
+import { useUserContext } from "../../context/userContext";
 
 const CardHeader = styled.div`
   font-weight: 500;
@@ -30,6 +35,21 @@ const DragItem = styled.div`
 
 const Task = ({ item, index }) => {
 
+  const { uid } = useUserContext();
+  const dispatch = useDispatch();
+
+  const deleteTaskId = () => {
+    dispatch(deleteTask(item.id))
+      .unwrap()
+      .then(response => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+    dispatch(findTaskByUserID(uid))
+  }
+
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided, snapshot) => {
@@ -40,7 +60,19 @@ const Task = ({ item, index }) => {
             {...provided.draggableProps}
             {...provided.dragHandleProps}
           >
-            <CardHeader>Task-{item.id}: <span>{item.content}</span></CardHeader>
+            <CardHeader>
+              <div className="row ml-0 mr-0">
+                <Badge pill className={`card-post__category bg-blue`}>
+                  Task-{item.id}
+                </Badge> 
+                  <div className="ml-1">
+                    <span>{item.content}</span>
+                  </div>
+                <div className="ml-auto">
+                  <BiTrash size={19} onClick={deleteTaskId} color="red"/>
+                </div>
+              </div>
+            </CardHeader>
             <span>{item.description}</span>
             <CardFooter>
               <span>{item.priority}</span>

@@ -1,5 +1,35 @@
 const Task = require("../models/task.model.js");
 
+//Создаем и сохраняем новое дело
+exports.create = (req, res) => {
+  //  Валидизируем запрос
+  if (!req.body) {
+    res.status(400).send({
+      message: "У нас не может не быть контента"
+    });
+  }
+
+  // создание своего дела
+
+  const tasks = new Task({
+    title: req.body.title,
+    description: req.body.description,
+    priority: req.body.priority,
+    status: req.body.status,
+    date_task: req.body.date_task
+  });
+
+
+  Task.create(req.params.user_id, tasks, (err, data) => {
+    if (err)
+      res.status(500).send({
+        message:
+          err.message || "Произошла ошибка во время выполнения кода"
+      });
+    else res.send(data);
+  });
+};
+
 // поиск всех столбцов одного пользователя
 exports.findOne = (req, res) => {
     Task.findById(req.params.user_id, (err, data) => {
@@ -22,7 +52,7 @@ exports.findOne = (req, res) => {
   }
 
   // обновление статуса
-exports.updateState = (req, res) => {
+exports.updateTask = (req, res) => {
   if (!req.body) {
     res.status(400).send({
       message: "Content can not be empty!"
@@ -49,3 +79,20 @@ exports.updateState = (req, res) => {
     }
   );
 }
+
+// Удаление задачи по id
+exports.delete = (req, res) => {
+  Task.remove(req.params.task_id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Tutorial with id ${req.params.task_id}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Could not delete Tutorial with id " + req.params.task_id
+        });
+      }
+    } else res.send({ message: `Tutorial was deleted successfully!` });
+  });
+};

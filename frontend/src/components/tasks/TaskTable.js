@@ -126,7 +126,6 @@ function TaskTable() {
         console.log('setElements');
       } 
     }, 100);
-    console.log(elements);
     return () => mounted = false;
   }, [tasks])
 

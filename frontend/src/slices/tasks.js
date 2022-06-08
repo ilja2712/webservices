@@ -5,8 +5,8 @@ const initialState = [];
 
 export const createTask = createAsyncThunk(
   "task/create",
-  async ({ head, description, date_task, priority, status }, uid) => {
-    const res = await TaskService.create({ head, description, date_task, priority, status }, uid);
+  async ({ title, description, date_task, priority, status, uid } ) => {
+    const res = await TaskService.create({ title, description, date_task, priority, status, uid } );
     return res.data;
   }
 );
@@ -28,6 +28,15 @@ export const updateTaskStatus = createAsyncThunk(
   }
 );
 
+export const deleteTask = createAsyncThunk(
+  "task/delete",
+  async (id) => {
+    console.log(id);
+    await TaskService.remove(id);
+    return { id };
+  }
+);
+
 const taskSlice = createSlice({
   name: "task",
   initialState,
@@ -39,17 +48,18 @@ const taskSlice = createSlice({
       return [...action.payload];
     },*/
     [updateTaskStatus.fulfilled]: (state, action) => {
-      const index = state.findIndex(task => task.id === action.payload['ID_TASK']);
+      const index = state.findIndex(task => task['ID_TASK'] === action.payload['ID_TASK']);
+      console.log(index);
       state[index] = {
         ...state[index],
         ...action.payload,
       };
     },
-    /*
-    [deleteTutorial.fulfilled]: (state, action) => {
-      let index = state.findIndex(({ id }) => id === action.payload.id);
+    [deleteTask.fulfilled]: (state, action) => {
+      const index = state.findIndex(task => task['ID_TASK'] === action.payload['ID_TASK']);
       state.splice(index, 1);
     },
+    /*
     [deleteAllTutorials.fulfilled]: (state, action) => {
       return [];
     },*/

@@ -4,7 +4,7 @@ module.exports = app => {
        const task = require("../controllers/task.controller.js");
      
        // Создание нового дела по методу post
-       //app.post("/deals", deals.create);
+       app.post("/task/:user_id", task.create);
      
        // Получение всех столбцов сразу
        //app.get("/state/", state.findAll);
@@ -13,13 +13,13 @@ module.exports = app => {
        app.get("/task/:user_id", task.findOne);
 
        // обновить состояние по id
-       app.put("/task/:user_id/:task_id", task.updateState);
+       app.put("/task/:user_id/:task_id", task.updateTask);
      
        //Получение отдельного дела по id (на самом деле в запросе должен inner_key), но я не стал это менять
        //app.get("/deal/:dealId", deals.findOne);
      
        //Удалить дело по id
-       //app.delete("/deal/:dealId", deals.delete);
+       app.delete("/task/:task_id", task.delete);
      
        // Удалить сразу все дела
        //app.delete("/deals", deals.deleteAll);

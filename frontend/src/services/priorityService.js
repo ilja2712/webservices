@@ -1,5 +1,4 @@
 import http from '../http-common';
-import { useUserContext } from "../context/userContext";
 /*
 const getUid = () => {
     const { uid } = useUserContext();
@@ -7,9 +6,9 @@ const getUid = () => {
 }*/
 
 // получение задач конкретного пользователя 
-const getPriority = (uid) => {
+const get = (uid) => {
     return http.get("/priority/" + uid);
-}
+};
 
 /*
 export const setPriority = (data, uid) => {
@@ -25,4 +24,8 @@ export const setNameCol = (name, id, uid) => {
 }
 */
 
-export default getPriority;
+const PriorityService = {
+    get
+};
+
+export default PriorityService;

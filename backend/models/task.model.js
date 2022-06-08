@@ -2,12 +2,37 @@ const sql = require("./db.js");
 
 // конструктор состояния
 const Task = function(task) {
-    this.name = task.content;
+    this.title = task.title;
     this.description = task.description;
-    this.date_task = task.date_task;
+    this.date_task = new Date(task.date_task).toLocaleDateString('en-GB');
     this.priority = task.priority;
     this.status = task.status;
+    this.uid = task.uid;
     this.id = task.id;
+  };
+
+  Task.create = (user_id, newTask, result) => {
+    sql.query(`insert into task 
+	set task.Name = '${newTask.title}',
+		task.Description = '${newTask.description}',
+		task.Date_Task = STR_TO_DATE('${newTask.date_task}', '%d/%m/%Y'),
+		task.ID_PRIORITY = (select p.ID_PRIORITY
+							from priority p
+							where p.Name = '${newTask.priority}'),
+		task.ID_STATE = (select s.ID_STATE 
+							from state s, task_table tt, users u 
+							where s.Name = '${newTask.status}' and s.ID_TABLE = tt.ID_TABLE and tt.ID_USERS = u.ID_USERS and u.ID_FIREBASE = '${user_id}')`, (err, res) => {
+      //операция вставки из SQL
+      if (err) {
+        console.log("error: ", err);
+        result(err, null);
+        //немного бедная обработка ошибок, но на первое время хватит
+        return;
+      }
+
+      console.log("Дело сделано", { id: res.name, ...newTask });
+      result(null, { id: res.name, ...newTask });
+    });
   };
 
   Task.updateByIdTaskState = (user_id, task_id, task, result) => {
@@ -57,6 +82,25 @@ Task.findById = (user_id, result) => {
         // когда ничего не удалось найти
         result({ kind: "not_found" }, null);
         });
+};
+
+Task.remove = (id, result) => {
+  sql.query(`DELETE FROM TASK WHERE ID_TASK = ${Number(id)}`, (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+
+    if (res.affectedRows == 0) {
+      // not found Tutorial with the id
+      result({ kind: "not_found" }, null);
+      return;
+    }
+
+    console.log("Deleted tutorial with id: ", id);
+    result(null, res);
+  });
 };
 
 module.exports = Task;

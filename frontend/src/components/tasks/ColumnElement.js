@@ -62,7 +62,7 @@ const ColumnElement = ({ status, elements, id }) => {
       <ColumnHeader className="mnw250">
           <div className="columnButton1">
               <div className="columnButton"><input className="mxw150 fieldColumnName form-control-plaintext"
-                                                  onChange={setColumnName}
+                                                  onBlur={setColumnName}
                                                   contentEditable="false" 
                                                   defaultValue={columnName}>
                                             </input></div>

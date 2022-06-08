@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { IoAddCircleOutline } from "react-icons/io5";
-import { Card, FormTextarea, FormGroup, FormInput, DatePicker } from "shards-react";
-import { useDispatch } from "react-redux";
+import { FormTextarea, FormGroup, FormInput, DatePicker } from "shards-react";
 import { createTask } from "../../slices/tasks";
 import { useUserContext } from '../../context/userContext';
-import getPriority from '../../services/priorityService';
+import { findPriorityByUserID, selectAllPriority } from "../../slices/priority";
+import { findTaskByUserID, selectAllTask } from '../../slices/tasks';
+import { useDispatch, useSelector } from "react-redux";
 import {
   InputGroup,
   InputGroupAddon,
@@ -20,43 +20,49 @@ import {
 
 export default function AddTask(props) {
 
+  const initialTaskState = {
+    id: null,
+    title: "",
+    description: "",
+    date_task: "",
+    status: props.columnName,
+    priority: "Низкий"
+  };
 
-  // ВРЕМЕННО ПОТОМ ИЗМЕНИТСЯ ПОЛУЧЕНИЕ ДАННЫХ ЧЕРЕЗ REDUX
-  const [priority, setPriority] = useState();
-  const [value, setValue] = useState("");
+  const priority = useSelector(selectAllPriority);
+  const [task, setTask] = useState(initialTaskState);
   const { uid } = useUserContext();
-  const priorities = [];
 
-  getPriority(uid).then(response => {
-    if (priorities.length == 0) {
-      for (const doc of response.data) {
-        priorities.push(doc);
-        if (doc.id == 0) setValue(doc["Name"]);
+  const dispatch = useDispatch();
+
+  // получить списоку приоритетов пользователя
+  const getPriority = useCallback(() => {
+    dispatch(findPriorityByUserID(uid))
+    .unwrap()
+    .then(response => {
+      console.log(response);
+    })
+    .catch(e => {
+      console.error(e);
+    })
+}, [dispatch]);
+
+useEffect(() => {
+  let mounted = true;
+  setTimeout(() => {
+    if (mounted) {
+      if (priority.length == 0) {
+        getPriority();
       }
     }
-  })
+  }, 100);
 
-  useEffect(() => {
-    let mounted = true;
-    setTimeout(() => {
-      if(mounted) {
-        setPriority(priorities);
-      } 
-    }, 100);
-
-    return () => mounted = false;
-  }, [])
-
-  const handleSetPriority = (e) => {
-    console.log(e.target.value);
-    setValue(e.target.value);
-    console.log(value);
-  }
-  /***---------------------------------- */
-
+  return () => mounted = false;
+}, []);
 
   /** Открытие и закрытие окна */
   const [open, setOpen] = useState(false);
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -65,38 +71,31 @@ export default function AddTask(props) {
     setOpen(true);
   }
 
-  const initialTaskState = {
-    id: null,
-    title: "",
-    description: "",
-    date_task: "",
-    status: "",
-    priority: ""
-  };
-
-  const [task, setTask] = useState(initialTaskState);
- 
-  const dispatch = useDispatch();
-
   // запись значений task
   const handleInputChange = event => {
     const { name, value } = event.target;
     setTask({ ...task, [name]: value });
   };
+
+
+  // сохранить дат
+  const handleDateChange = (date) => {
+      setTask({ ...task, date_task: new Date(date) });
+  }
   
   // сохранить таск
   const saveTask = () => {
     const { title, description, date_task, status, priority } = task;
 
-    dispatch(createTask({ title, description, date_task, status, priority }))
+    dispatch(createTask({ title, description, date_task, status, priority, uid }))
       .unwrap()
       .then(data => {
         console.log(data);
+        dispatch(findTaskByUserID(uid))
         setTask({
           id: null,
           title: data.title,
           description: data.description,
-          date_task: data.date_task,
           status: props.columnName,
           priority: data.priority
         });
@@ -104,6 +103,7 @@ export default function AddTask(props) {
       .catch(e => {
         console.log(e);
       });
+    setOpen(false);
   };
 
   return (
@@ -117,14 +117,15 @@ export default function AddTask(props) {
         scroll={"body"}
       >
         <DialogTitle id="alert-dialog-title">
-        <FormInput size="lg" className="mb-3" placeholder="Заголовок задачи" onChange={handleInputChange} />
+        <FormInput size="lg" className="mb-3" placeholder="Заголовок задачи" name="title" onChange={handleInputChange} />
         </DialogTitle>
         <DialogContent>
         <FormGroup>
               <DatePicker
                 size="sm"
+                name="date_task"
                 selected={task.date_task}
-                onChange={handleInputChange}
+                onChange={handleDateChange}
                 placeholderText="Срок выполнения задачи"
                 dropdownMode="select"
                 className="text-center"
@@ -132,14 +133,14 @@ export default function AddTask(props) {
         </FormGroup>
         <FormGroup>
               <label htmlFor="feInputAddress">Описание задачи</label>
-              <FormTextarea size="lg" id="feDescription" rows="5" onChange={handleInputChange} />
+              <FormTextarea size="lg" id="feDescription" rows="5" name="description" onChange={handleInputChange} />
         </FormGroup>
         <FormGroup>
               <InputGroup className="mb-3">
                 <InputGroupAddon type="prepend">
                   <InputGroupText>Приоритет</InputGroupText>
                 </InputGroupAddon>
-                <FormSelect onChange={handleInputChange}>
+                <FormSelect name="priority" onChange={handleInputChange}>
                   { priority && priority.length ?
                     priority.map((pr, idx) => (<option key={idx}>{pr["Name"]}</option>)
                   ) : null }
