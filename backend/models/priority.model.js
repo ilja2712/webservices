@@ -7,7 +7,7 @@ const Priority = function(priority) {
 
 // нахождение тасков по одному пользователю 
 Priority.findById = (user_id, result) => {
-    sql.query(`select p.Name
+    sql.query(`select p.Name, p.Color
                 from priority p, users u 
                 where p.ID_USERS = u.ID_USERS and u.ID_FIREBASE = '${user_id}'`, (err, res) => {
         if (err) {

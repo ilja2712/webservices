@@ -2,10 +2,11 @@ import { Draggable } from "react-beautiful-dnd";
 import React, { useMemo } from "react";
 import styled, { css } from "styled-components";
 import { BiTrash } from "react-icons/bi";
-import { Badge } from "shards-react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { findTaskByUserID, deleteTask } from "../../slices/tasks";
 import { useUserContext } from "../../context/userContext";
+import { selectAllPriority } from "../../slices/priority";
+import ViewTask from "./ViewTask";
 
 const CardHeader = styled.div`
   font-weight: 500;
@@ -25,16 +26,16 @@ const CardFooter = styled.div`
 const DragItem = styled.div`
   padding: 10px;
   border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  background: white;
   margin: 0 0 8px 0;
   display: grid;
   grid-gap: 20px;
   flex-direction: column;
+  background: rgb(255 255 255 / 54%)
 `;
 
 const Task = ({ item, index }) => {
 
+  const priority = useSelector(selectAllPriority);
   const { uid } = useUserContext();
   const dispatch = useDispatch();
 
@@ -50,11 +51,22 @@ const Task = ({ item, index }) => {
     dispatch(findTaskByUserID(uid))
   }
 
+  const colorPriority = () => {
+    let color = "";
+    priority.filter(p => {
+        if(p['Name'] == item.priority) {
+            color = p['Color'];
+        }
+    })
+    return color
+}
+
   return (
     <Draggable draggableId={item.id} index={index}>
       {(provided, snapshot) => {
         return (
           <DragItem
+            className={`card-task-${colorPriority()}`}
             ref={provided.innerRef}
             snapshot={snapshot}
             {...provided.draggableProps}
@@ -62,23 +74,17 @@ const Task = ({ item, index }) => {
           >
             <CardHeader>
               <div className="row ml-0 mr-0">
-                <Badge pill className={`card-post__category bg-blue`}>
-                  Task-{item.id}
-                </Badge> 
                   <div className="ml-1">
-                    <span>{item.content}</span>
+                    <ViewTask item={item} id={item.id}/>
                   </div>
                 <div className="ml-auto">
-                  <BiTrash size={19} onClick={deleteTaskId} color="red"/>
+                  <BiTrash size={19} onClick={deleteTaskId} color="#015c50"/>
                 </div>
               </div>
             </CardHeader>
-            <span>{item.description}</span>
+            <span>{item.content}</span>
             <CardFooter>
-              <span>{item.priority}</span>
-              <Author>
-                {item.date_task}
-              </Author>
+              <span>{item.date_task}</span>
             </CardFooter>
           </DragItem>
         );

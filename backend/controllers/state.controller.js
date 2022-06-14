@@ -9,12 +9,10 @@ exports.create = (req, res) => {
     });
   }
 
-  // создание своего дела
-
+  // создание колонки
   const state = new State({
-    name: req.body.name
-    // у нашего дела будет текст и внутренний id, который будет использоваться как 
-    // ключ для элементов в React
+    name: req.body.name,
+    uid: req.body.uid
   });
 
 
@@ -92,4 +90,22 @@ exports.update = (req, res) => {
       } else res.send(data);
     }
   );
+};
+
+// Удаление столбца по id
+exports.delete = (req, res) => {
+  State.remove(req.params.state_id, (err, data) => {
+    console.log(req.params.state_id);
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).send({
+          message: `Not found Tutorial with id ${req.params.task_id}.`
+        });
+      } else {
+        res.status(500).send({
+          message: "Could not delete Tutorial with id " + req.params.task_id
+        });
+      }
+    } else res.send({ message: `Tutorial was deleted successfully!` });
+  });
 };

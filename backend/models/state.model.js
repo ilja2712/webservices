@@ -3,10 +3,15 @@ const sql = require("./db.js");
 // конструктор состояния
 const State = function(state) {
     this.name = state.name;
+    this.uid = state.uid;
   };
-  //у нашей модели будут функции, с помощью которых можно осуществлять все операции CRUD, которые были озвучены в начале статьи:
   State.create = (newState, result) => {
-    sql.query("INSERT INTO USERS SET ?", newState, (err, res) => {
+    sql.query(`insert into state 
+        set state.Name = '${newState.name}',
+        state.ID_TABLE = (select tt.ID_TABLE 
+                            from task_table tt, users u
+                            where tt.ID_USERS = u.ID_USERS 
+                            and u.ID_FIREBASE = '${newState.uid}')`, (err, res) => {
       //операция вставки из SQL
       if (err) {
         console.log("error: ", err);
@@ -82,7 +87,7 @@ const State = function(state) {
     };
     
     State.remove = (id, result) => {
-        sql.query("DELETE FROM USERS WHERE id = ?", id, (err, res) => {
+        sql.query(`delete from state where state.ID_STATE = ${id}`, (err, res) => {
             if (err) {
                 console.log("error: ", err);
                 result(null, err);
@@ -95,7 +100,7 @@ const State = function(state) {
                 return;
             }
 
-            console.log("Удален пользователь с ", id);
+            console.log("Удалена колонка с id = ", id);
             result(null, res);
         });
     };

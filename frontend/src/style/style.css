@@ -10,3 +10,44 @@
     background-color: #d4d4d4;
     border: 0px;
 }
+
+.columnBase {
+    display: flex!important;
+    overflow-x: auto!important;
+}
+
+.greenColor {
+    background-color: rgb(0, 139, 12)!important;
+}
+
+.yellowColor {
+    background-color: rgb(216, 212, 0)!important;
+}
+
+.orangeColor {
+    background-color: darkorange!important;
+}
+
+.redColor {
+    background-color: darkred!important;
+}
+
+/**
+CARD TASK
+**/
+.card-task-greenColor {
+    box-shadow: 0 1px 3px rgb(0, 139, 12), 0 1px 2px rgb(0, 139, 12);
+}
+
+.card-task-yellowColor {
+    box-shadow: 0 1px 3px rgb(216, 212, 0), 0 1px 2px rgb(216, 212, 0);
+}
+
+.card-task-orangeColor {
+    box-shadow: 0 1px 3px darkorange, 0 1px 2px darkorange;
+}
+
+.card-task-redColor {
+    box-shadow: 0 1px 3px darkred, 0 1px 2px darkred;
+
+}

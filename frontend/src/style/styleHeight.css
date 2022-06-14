@@ -52,6 +52,14 @@
 /* 
 **** Максимальная высота ****
 */
+.mxh50 {
+    max-height: 50px;
+}
+
+.mxh75 {
+    max-height: 75px;
+}
+
 .mxh100 {
     max-height: 100px;
 }

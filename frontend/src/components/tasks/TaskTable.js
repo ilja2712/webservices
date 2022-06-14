@@ -8,11 +8,11 @@ import { selectAllStates, findStateByUserID } from "../../slices/states";
 import { findTaskByUserID } from "../../slices/tasks";
 import { selectAllTask } from "../../slices/tasks";
 import { useDispatch, useSelector } from "react-redux";
+import AddColumn from './AddColumn';
 
 const ListGrid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 8px;
 `;
 
   // отображение задач
@@ -159,17 +159,18 @@ function TaskTable() {
   return (
   <>{(elements) ? 
       <DragDropContext onDragEnd={onDragEnd}>
-          <ListGrid>
+          <ListGrid className='columnBase'>
             {states && tasks && states.map((listKey, idx) => (
               <ColumnElement
                 elements={elements[listKey['Name']]}
                 key={listKey['Name']}
                 status={listKey['Name']}
                 id={idx}
+                idl={listKey['ID_STATE']}
               />
             ))}
+            <AddColumn />
           </ListGrid>
-        
       </DragDropContext>
     : null}</>
   );

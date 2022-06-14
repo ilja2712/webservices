@@ -108,7 +108,7 @@ useEffect(() => {
 
   return (
     <div>
-      <center><IoAddCircleOutline size={30} color="brown" onClick={handleOpen}/></center>
+      <center><IoAddCircleOutline size={30} color="#015c50" onClick={handleOpen}/></center>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -124,6 +124,7 @@ useEffect(() => {
               <DatePicker
                 size="sm"
                 name="date_task"
+                dateFormat="dd/MM/yyyy"
                 selected={task.date_task}
                 onChange={handleDateChange}
                 placeholderText="Срок выполнения задачи"

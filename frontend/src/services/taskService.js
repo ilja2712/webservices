@@ -10,6 +10,12 @@ const updateStatus = (data) => {
     return http.put(`/task/${data.uid}/${data.id}`, data)
 }
 
+// редактирование задачи
+const updateAll = (data) => {
+    console.log(data);
+    return http.put(`/task/${data.id}`, data)
+}
+
 // создание новой задачи
 const create = (data) => {
     console.log(data);
@@ -21,12 +27,19 @@ const remove = id => {
     return http.delete(`/task/${id}`);
   };
 
+  // удаление задач при удалени столбца
+const removeWS = id => {
+    return http.delete(`/task/ws/${id}`);
+  };
+
 
 const TaskService = {
     get,
     updateStatus,
+    updateAll,
     create,
-    remove
+    remove,
+    removeWS
 };
 
 export default TaskService;

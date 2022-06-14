@@ -3,8 +3,8 @@ module.exports = app => {
    
        const state = require("../controllers/state.controller.js");
      
-       // Создание нового дела по методу post
-       //app.post("/deals", deals.create);
+       // Создание нового нового по методу post
+       app.post("/state/:user_id", state.create);
      
        // Получение всех столбцов сразу
        app.get("/state/", state.findAll);
@@ -20,7 +20,7 @@ module.exports = app => {
        //app.get("/deal/:dealId", deals.findOne);
      
        //Удалить дело по id
-       //app.delete("/deal/:dealId", deals.delete);
+       app.delete("/state/:state_id", state.delete);
      
        // Удалить сразу все дела
        //app.delete("/deals", deals.deleteAll);

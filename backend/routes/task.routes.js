@@ -14,12 +14,15 @@ module.exports = app => {
 
        // обновить состояние по id
        app.put("/task/:user_id/:task_id", task.updateTask);
+
+       // обновить задачу по id
+       app.put("/task/:task_id", task.updateAllTask);
      
-       //Получение отдельного дела по id (на самом деле в запросе должен inner_key), но я не стал это менять
-       //app.get("/deal/:dealId", deals.findOne);
-     
-       //Удалить дело по id
+       //Удалить задачу по id
        app.delete("/task/:task_id", task.delete);
+
+       //Удалить задачи по id столбца
+       app.delete("/task/ws/:state_id", task.deleteWS);
      
        // Удалить сразу все дела
        //app.delete("/deals", deals.deleteAll);
