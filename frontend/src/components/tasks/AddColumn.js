@@ -8,11 +8,13 @@ import { findTaskByUserID } from '../../slices/tasks';
 
 const ColumnHeader = styled.div`
     text-transform: uppercase;
-    margin: 5px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    margin-left: 15px;
     padding: 10px;
     border-radius: 6px;
-    background: #e9ecef;
-    box-shadow: 0 1px 2px #015c50, 0 1px 2px #015c50;
+    background: white;
+    box-shadow: 0 2px 0 rgb(90 97 105 / 11%), 0 4px 8px rgb(90 97 105 / 12%), 0 10px 10px rgb(90 97 105 / 6%), 0 7px 70px rgb(90 97 105 / 10%);
 `;
 
 const AddColumn = () => {

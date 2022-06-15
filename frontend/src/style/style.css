@@ -6,9 +6,39 @@
     margin-left: 35px;
 }
 
+.fieldDateTask {
+    background-color: #ffffff!important;
+    border: 0px!important;
+    font-weight: 600!important;
+    font-size: 16px!important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
+    color: #3d5170;
+}
+
 .fieldColumnName {
-    background-color: #d4d4d4;
-    border: 0px;
+    background-color: #ffffff!important;
+    border: 0px!important;
+    font-weight: 600!important;
+    font-size: 22px!important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
+    color: #3d5170;
+}
+
+.fieldDescriptionName {
+    background-color: #ffffff!important;
+    border: 0px!important;
+    font-weight: 600!important;
+    font-size: 18px!important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
+    color: #3d5170;
+}
+
+.fieldDescription {
+    background-color: #ffffff!important;
+    border: 1px solid #e1e5eb!important;
+    font-weight: 500!important;
+    font-size: 16px!important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
 }
 
 .columnBase {
@@ -29,12 +59,39 @@
 }
 
 .redColor {
-    background-color: darkred!important;
+    background-color:darkred!important;
+}
+
+.task-id-design {
+    font-size: 14px!important;
+    font-weight: bold!important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
+    color: white!important;
+}
+
+.head-task {
+    overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 1;
+	-webkit-box-orient: vertical;
+}
+
+.font-task-info {
+    font-size: 15px!important;
+    font-weight: normal!important;
 }
 
 /**
 CARD TASK
 **/
+.card-task {
+    background-color: rgb(255, 255, 255)!important;
+    font-size: 16px!important;
+    font-weight: bold!important;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif!important;
+}
+
 .card-task-greenColor {
     box-shadow: 0 1px 3px rgb(0, 139, 12), 0 1px 2px rgb(0, 139, 12);
 }
@@ -50,4 +107,33 @@ CARD TASK
 .card-task-redColor {
     box-shadow: 0 1px 3px darkred, 0 1px 2px darkred;
 
+}
+
+/**
+SELECTOR COLORS
+*/
+.selector-pr {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
+    font-size: 14px!important;
+}
+
+.selector-greenColor {
+    background: rgb(0, 139, 12)!important;
+    color:white!important;
+}
+
+.selector-yellowColor {
+    background: rgb(216, 212, 0)!important;
+    color:black!important;
+}
+
+.selector-orangeColor {
+    background: darkorange!important;
+    color:black!important;
+}
+
+.selector-redColor {
+    background: darkred!important;
+    color:white!important;
+    
 }

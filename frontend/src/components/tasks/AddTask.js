@@ -108,7 +108,7 @@ useEffect(() => {
 
   return (
     <div>
-      <center><IoAddCircleOutline size={30} color="#015c50" onClick={handleOpen}/></center>
+      <center><IoAddCircleOutline size={30} color="#b1b1b1" onClick={handleOpen}/></center>
       <Dialog
         open={open}
         onClose={handleClose}

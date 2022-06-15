@@ -16,11 +16,13 @@ const ColumnHeader = styled.div`
 `;
 
 const DroppableStyles = styled.div`
-  margin: 5px;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  margin-left: 15px;
   padding: 10px;
-  border-radius: 6px;
-  background: #e9ecef;
-  box-shadow: 0 1px 2px #015c50, 0 1px 2px #015c50;
+  border-radius: 10px;
+  background: white;
+  box-shadow: 0 2px 0 rgb(90 97 105 / 12%), 0 4px 8px rgb(90 97 105 / 12%), 0 10px 10px rgb(90 97 105 / 12%), 0 7px 70px rgb(90 97 105 / 12%);
 `
 
 const ColumnElement = ({ status, elements, id, idl }) => {
@@ -74,17 +76,17 @@ const ColumnElement = ({ status, elements, id, idl }) => {
   return ( <DroppableStyles>
       <ColumnHeader className="mnw250 mb-0">
           <div className="row ml-0 mr-0 mt-1">
-              <div className="ml-2"><input className="mxw200 fieldColumnName form-control-plaintext"
+              <div className="ml-2"><input className="mxw200 fieldColumnName"
                                                   onBlur={setColumnName}
                                                   contentEditable="false" 
                                                   defaultValue={columnName}>
                                             </input></div>
               <div className="ml-auto mt-2">
-                <BiTrash size={25} onClick={deleteColumn} color="#015c50"/>
+                <BiTrash size={25} onClick={deleteColumn} color="#ccc"/>
                 </div>
           </div>
         </ColumnHeader>
-        <hr className="mt-1 mb-3" color="#015c50"></hr>
+        <br></br>
         <Droppable droppableId={`${columnName}`}>
           {(provided) => (
             <div {...provided.droppableProps} ref={provided.innerRef}> 

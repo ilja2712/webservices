@@ -3,7 +3,13 @@ export default function() {
     {
       title: "Задачи",
       to: "/tasks",
-      htmlBefore: '<i class="material-icons">view_module</i>',
+      htmlBefore: '<i class="material-icons">dashboard</i>',
+      htmlAfter: ""
+    },
+    {
+      title: "Финансы",
+      to: "/finances",
+      htmlBefore: '<i class="material-icons">account_balance_wallet</i>',
       htmlAfter: ""
     },
     {

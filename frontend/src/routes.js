@@ -15,6 +15,7 @@ import BlogPosts from "./views/BlogPosts";
 
 // Действующие страницы
 import Tasks from "./views/Tasks";
+import Finances from "./views/Finances";
 
 export default [
   {
@@ -32,6 +33,11 @@ export default [
     path: "/tasks",
     layout: DefaultLayout,
     component: Tasks
+  },
+  {
+    path: "/finances",
+    layout: DefaultLayout,
+    component: Finances
   },
   {
     path: "/user-profile-lite",

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,7 +9,7 @@ import { useUserContext } from '../../context/userContext';
 import { selectAllPriority } from "../../slices/priority";
 import { findTaskByUserID } from '../../slices/tasks';
 import { useDispatch, useSelector } from "react-redux";
-import { Badge } from "shards-react";
+import { Badge, Button } from "shards-react";
 import {
     InputGroup,
     InputGroupAddon,
@@ -89,7 +88,7 @@ export default function ViewTask( { item, id } ) {
     return (
     <div>
         {priority && priority.length ?
-        <Badge pill className={`card-post__category ${colorPriority()}`} onClick={handleOpen}>
+        <Badge pill className={`card-post__category task-id-design ${colorPriority()}`} onClick={handleOpen}>
             Task-{id}
         </Badge>
         : null}
@@ -100,42 +99,49 @@ export default function ViewTask( { item, id } ) {
         maxWidth={"md"}
         scroll={"body"}
         >
-        <DialogTitle id="alert-dialog-title">
-        <FormInput size="lg" className="mb-3" placeholder="Заголовок задачи" name="title" value={task.title} onChange={handleInputChange} />
+        <DialogTitle id="alert-dialog-title" className='row ml-0 mr-0'>
+            <div className="ml-1">
+                <Badge pill className={`card-post__category task-id-design ${colorPriority()}`}>
+                    Task-{id}
+                </Badge>
+            </div>
+            <div className="ml-1">
+                <input className="mnw700 fieldColumnName" placeholder="Заголовок задачи" name="title" value={task.title} onChange={handleInputChange}></input>
+            </div>
         </DialogTitle>
         <DialogContent>
-        <FormGroup>
-                <DatePicker
-                size="sm"
-                name="date_task"
-                selected={task.date_task}
-                dateFormat="dd/MM/yyyy"
-                onChange={handleDateChange}
-                placeholderText="Срок выполнения задачи"
-                dropdownMode="select"
-                className="text-center"
-                />
-        </FormGroup>
-        <FormGroup>
-                <label htmlFor="feInputAddress">Описание задачи</label>
-                <FormTextarea size="lg" id="feDescription" rows="5" name="description" value={task.description} onChange={handleInputChange} />
-        </FormGroup>
-        <FormGroup>
-                <InputGroup className="mb-3">
-                <InputGroupAddon type="prepend">
-                    <InputGroupText>Приоритет</InputGroupText>
-                </InputGroupAddon>
-                <FormSelect name="priority" value={task.priority} onChange={handleInputChange}>
-                    { priority && priority.length ?
-                    priority.map((pr, idx) => (<option key={idx}>{pr["Name"]}</option>)
-                    ) : null }
-                </FormSelect>
-                </InputGroup>
-        </FormGroup>
+            <FormGroup>
+                    <DatePicker
+                    size="sm"
+                    name="date_task"
+                    selected={task.date_task}
+                    dateFormat="dd/MM/yyyy"
+                    onChange={handleDateChange}
+                    placeholderText="Срок выполнения задачи"
+                    dropdownMode="select"
+                    className="fieldDateTask"
+                    />
+            </FormGroup>
+            <FormGroup>
+                    <label htmlFor="feInputAddress" className='fieldDescriptionName'>Описание задачи</label>
+                    <FormTextarea className="fieldDescription" size="lg" id="feDescription" rows="5" name="description" value={task.description} onChange={handleInputChange} />
+            </FormGroup>
+            <FormGroup>
+                    <InputGroup className="mb-3">
+                    <InputGroupAddon type="prepend">
+                        <InputGroupText className={`selector-pr selector-${colorPriority()}`}>Приоритет</InputGroupText>
+                    </InputGroupAddon>
+                    <FormSelect name="priority" className='selector-pr' value={task.priority} onChange={handleInputChange}>
+                        { priority && priority.length ?
+                        priority.map((pr, idx) => (<option className='selector-pr' key={idx}>{pr["Name"]}</option>)
+                        ) : null }
+                    </FormSelect>
+                    </InputGroup>
+            </FormGroup>
         </DialogContent>
         <DialogActions>
-            <Button onClick={handleClose}>Отмена</Button>
-            <Button onClick={updateTask} autoFocus>Обновить</Button>
+            <Button outline theme="warning" className="mb-2 mr-1" onClick={handleClose}>Отмена</Button>
+            <Button outline theme="success" className="mb-2 mr-1" onClick={updateTask} autoFocus>Обновить</Button>
         </DialogActions>
         </Dialog>
     </div>

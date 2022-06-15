@@ -12,10 +12,6 @@ const CardHeader = styled.div`
   font-weight: 500;
 `;
 
-const Author = styled.div`
-  display: flex;
-  align-items: center;
-`;
 const CardFooter = styled.div`
   width: 100%;
   display: flex;
@@ -28,7 +24,7 @@ const DragItem = styled.div`
   border-radius: 6px;
   margin: 0 0 8px 0;
   display: grid;
-  grid-gap: 20px;
+  grid-gap: 10px;
   flex-direction: column;
   background: rgb(255 255 255 / 54%)
 `;
@@ -66,7 +62,7 @@ const Task = ({ item, index }) => {
       {(provided, snapshot) => {
         return (
           <DragItem
-            className={`card-task-${colorPriority()}`}
+            className={`card-task card-task-${colorPriority()}`}
             ref={provided.innerRef}
             snapshot={snapshot}
             {...provided.draggableProps}
@@ -78,13 +74,13 @@ const Task = ({ item, index }) => {
                     <ViewTask item={item} id={item.id}/>
                   </div>
                 <div className="ml-auto">
-                  <BiTrash size={19} onClick={deleteTaskId} color="#015c50"/>
+                  <BiTrash size={19} onClick={deleteTaskId} color="#b1b1b1"/>
                 </div>
               </div>
             </CardHeader>
-            <span>{item.content}</span>
+            <span className="head-task font-task-info">{item.content}</span>
             <CardFooter>
-              <span>{item.date_task}</span>
+              <span className="font-task-info">{item.date_task}</span>
             </CardFooter>
           </DragItem>
         );
