@@ -22,7 +22,7 @@ const CardFooter = styled.div`
 const DragItem = styled.div`
   padding: 10px;
   border-radius: 6px;
-  margin: 0 0 8px 0;
+  margin: 0 0 10px 0;
   display: grid;
   grid-gap: 10px;
   flex-direction: column;

@@ -19,7 +19,7 @@
     background-color: #ffffff!important;
     border: 0px!important;
     font-weight: 600!important;
-    font-size: 22px!important;
+    font-size: 18px!important;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
     color: #3d5170;
 }
@@ -28,7 +28,7 @@
     background-color: #ffffff!important;
     border: 0px!important;
     font-weight: 600!important;
-    font-size: 18px!important;
+    font-size: 17px!important;
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
     color: #3d5170;
 }
@@ -75,11 +75,13 @@
 	display: -webkit-box;
 	-webkit-line-clamp: 1;
 	-webkit-box-orient: vertical;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
 }
 
 .font-task-info {
     font-size: 15px!important;
     font-weight: normal!important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif!important;
 }
 
 /**
