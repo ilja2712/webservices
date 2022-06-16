@@ -26,7 +26,7 @@ export const UserContextProvider = ({children}) => {
             res ? setUser(res) : setUser(null);
             setError("");
             setLoading(false);
-            setUid(res.uid);
+            res ? setUid(res.uid) : setUid(null);
         });
         return unsubscribe;
     }, [])

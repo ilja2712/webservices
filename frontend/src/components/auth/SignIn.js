@@ -1,5 +1,15 @@
 import { useUserContext } from "../../context/userContext";
 import React, { useRef } from "react";
+import {  
+    Card,
+    CardHeader,
+    CardBody,
+    Form,
+    FormGroup,
+    FormInput,
+    FormTextarea,
+    Button 
+} from "shards-react";
 
 const SignIn = () => {
     const emailRef = useRef();
@@ -19,16 +29,25 @@ const SignIn = () => {
         if(email) forgotPassword(email).then(() => (emailRef.current.value = ""));
     };
 
-    return (
-        <div>
-            <h2>Авторизация</h2>
-            <form onSubmit={onSubmit}>
-                <input placeholder="Email" type="email" ref={emailRef}></input>
-                <input placeholder="Пароль" type="password" ref={psdRef}></input>
-                <button type="submit">Войти</button>
-                <p onClick={forgotPasswordHandler}>Забыли пароль?</p>
-            </form>
-        </div>
+    return (<div>
+                {/* Card Header */}
+                <CardHeader className="border-bottom">
+                <h6 className="m-0">Авторизация</h6>
+                </CardHeader>
+
+                <CardBody className="d-flex flex-column">
+                    <form onSubmit={onSubmit}>
+                        <FormInput id="feEmailAddress" className="mb-2" placeholder="Email" type="email" innerRef={emailRef}></FormInput>
+                        <FormInput id="fePassword" className="mb-4" placeholder="Пароль" type="password" innerRef={psdRef}></FormInput>
+                        <Button outline theme="success" type="submit" className="mb-2 mr-2">
+                            Войти
+                        </Button>
+                        <Button onClick={forgotPasswordHandler} outline theme="danger" className="mb-2">
+                            Забыли пароль?
+                        </Button>
+                    </form>
+                </CardBody>
+            </div>
     );
 }
 
